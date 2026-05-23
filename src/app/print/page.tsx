@@ -31,9 +31,9 @@ export default function PrintPoster() {
       </header>
 
       {/* Main content - three columns, narrow side columns */}
-      <div className="flex-1 grid grid-cols-[0.65fr_2fr_0.5fr] gap-[28px] px-[30px] py-[24px] overflow-hidden">
+      <div className="flex-1 grid grid-cols-[0.65fr_2fr_0.5fr] grid-rows-[1fr] gap-[28px] px-[30px] py-[24px]">
         {/* LEFT: Course + Records + Key numbers */}
-        <div className="flex flex-col gap-[20px] overflow-hidden">
+        <div className="flex flex-col justify-between overflow-hidden">
           {/* Course profile */}
           <section>
             <SectionTitle>Løypa</SectionTitle>
@@ -88,7 +88,7 @@ export default function PrintPoster() {
         </div>
 
         {/* CENTER: Curiosa + Trofaste */}
-        <div className="flex flex-col gap-[20px] overflow-hidden">
+        <div className="flex flex-col justify-between overflow-hidden">
           {/* Visste du at */}
           <section>
             <SectionTitle>Visste du at...</SectionTitle>
@@ -164,7 +164,7 @@ export default function PrintPoster() {
         </div>
 
         {/* RIGHT: Top 5 per class */}
-        <div className="flex flex-col gap-[10px] overflow-hidden">
+        <div className="flex flex-col justify-between overflow-hidden">
           <SectionTitle>Topp 5 per klasse</SectionTitle>
           {mainClasses.map((cls) => (
             <div key={cls} className="bg-white rounded-[6px] border border-navy/10 overflow-hidden">
