@@ -58,7 +58,10 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
           type="text"
           placeholder="Skriv inn navn..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setHasSearched(false);
+          }}
           className="flex-1 px-4 py-2 rounded-lg border border-navy/20 bg-cream-light focus:outline-none focus:ring-2 focus:ring-red/50 text-sm"
         />
         <button
