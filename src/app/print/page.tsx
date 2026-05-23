@@ -30,8 +30,8 @@ export default function PrintPoster() {
         </div>
       </header>
 
-      {/* Main content - three columns */}
-      <div className="flex-1 grid grid-cols-[1.3fr_1.6fr_1fr] gap-[28px] px-[30px] py-[24px] overflow-hidden">
+      {/* Main content - three columns, narrow side columns */}
+      <div className="flex-1 grid grid-cols-[0.65fr_2fr_0.5fr] gap-[28px] px-[30px] py-[24px] overflow-hidden">
         {/* LEFT: Course + Records + Key numbers */}
         <div className="flex flex-col gap-[20px] overflow-hidden">
           {/* Course profile */}
