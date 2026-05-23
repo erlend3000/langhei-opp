@@ -95,11 +95,11 @@ export default function PrintPoster() {
             <div className="grid grid-cols-2 gap-[8px] mt-[10px]">
               <FunFactCard
                 title="Samlet distanse"
-                text={`Alle løpere til sammen har tilbakelagt ${stats.funFacts.totalKmRun} km i Langhei Opp`}
+                text={`Alle deltakere til sammen har løpt ${stats.funFacts.totalKmRun} km i Langhei Opp – nesten Oslo–Trondheim!`}
               />
               <FunFactCard
-                title="Høydemeter"
-                text={`Totalt ${stats.funFacts.totalElevationGain.toLocaleString()} m stigning – det er ${stats.funFacts.everestMultiple}× Mount Everest`}
+                title="Høydemeter samlet"
+                text={`Alle deltakere til sammen har klatret ${stats.funFacts.totalElevationGain.toLocaleString("nb-NO")} høydemeter – ${stats.funFacts.everestMultiple}× Everest!`}
               />
               <FunFactCard
                 title="Størst forbedring"
