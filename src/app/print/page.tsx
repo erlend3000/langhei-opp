@@ -90,11 +90,11 @@ export default function PrintPoster() {
         </div>
 
         {/* Center column - Records + Top 10 */}
-        <div className="flex flex-col gap-[16px] overflow-hidden">
+        <div className="flex flex-col gap-[20px] overflow-hidden">
           {/* Records */}
           <section>
             <SectionTitle>Løyperekorder</SectionTitle>
-            <div className="grid grid-cols-4 gap-[10px] mt-[8px]">
+            <div className="grid grid-cols-4 gap-[12px] mt-[10px]">
               {mainClasses.map((cls) => {
                 const record = stats.classRecords.find((cr) => cr.class === cls);
                 if (!record) return null;
@@ -112,17 +112,17 @@ export default function PrintPoster() {
           </section>
 
           {/* Top 10 all time */}
-          <section className="flex-1 flex flex-col min-h-0">
+          <section>
             <SectionTitle>Topp 10 – Alle tider</SectionTitle>
-            <div className="bg-white rounded-[6px] border border-navy/10 mt-[8px] overflow-hidden flex-1">
-              <table className="w-full text-[11px]">
+            <div className="bg-white rounded-[6px] border border-navy/10 mt-[10px] overflow-hidden">
+              <table className="w-full text-[12px]">
                 <thead>
                   <tr className="bg-navy text-white text-left">
-                    <th className="px-[8px] py-[6px] font-medium w-[24px]">#</th>
-                    <th className="px-[8px] py-[6px] font-medium">Tid</th>
-                    <th className="px-[8px] py-[6px] font-medium">Navn</th>
-                    <th className="px-[8px] py-[6px] font-medium">År</th>
-                    <th className="px-[8px] py-[6px] font-medium">Klasse</th>
+                    <th className="px-[10px] py-[8px] font-medium w-[28px]">#</th>
+                    <th className="px-[10px] py-[8px] font-medium">Tid</th>
+                    <th className="px-[10px] py-[8px] font-medium">Navn</th>
+                    <th className="px-[10px] py-[8px] font-medium">År</th>
+                    <th className="px-[10px] py-[8px] font-medium">Klasse</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -131,15 +131,15 @@ export default function PrintPoster() {
                       key={i}
                       className={i % 2 === 0 ? "bg-cream-light/50" : "bg-white"}
                     >
-                      <td className="px-[8px] py-[5px] font-display text-[14px] text-red">
+                      <td className="px-[10px] py-[7px] font-display text-[16px] text-red">
                         {i + 1}
                       </td>
-                      <td className="px-[8px] py-[5px] font-display text-[16px]">
+                      <td className="px-[10px] py-[7px] font-display text-[18px]">
                         {r.time}
                       </td>
-                      <td className="px-[8px] py-[5px]">{getFullName(r)}</td>
-                      <td className="px-[8px] py-[5px]">{r.year}</td>
-                      <td className="px-[8px] py-[5px]">{r.class}</td>
+                      <td className="px-[10px] py-[7px]">{getFullName(r)}</td>
+                      <td className="px-[10px] py-[7px]">{r.year}</td>
+                      <td className="px-[10px] py-[7px]">{r.class}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -150,26 +150,49 @@ export default function PrintPoster() {
           {/* Trofaste løpere */}
           <section>
             <SectionTitle>Trofaste løpere</SectionTitle>
-            <div className="bg-white rounded-[6px] border border-navy/10 mt-[8px] overflow-hidden">
+            <div className="bg-white rounded-[6px] border border-navy/10 mt-[10px] overflow-hidden">
               <div className="grid grid-cols-2 divide-x divide-navy/5">
                 <div className="divide-y divide-navy/5">
-                  {stats.courseStats.allEditionsRunners.slice(0, 3).map((r, i) => (
-                    <div key={i} className="flex items-center px-[8px] py-[4px] text-[11px]">
-                      <span className="font-display text-[13px] text-red w-[16px]">{i + 1}</span>
+                  {stats.courseStats.allEditionsRunners.slice(0, 4).map((r, i) => (
+                    <div key={i} className="flex items-center px-[10px] py-[6px] text-[12px]">
+                      <span className="font-display text-[14px] text-red w-[18px]">{i + 1}</span>
                       <span className="flex-1 truncate">{r.name}</span>
-                      <span className="font-display text-[13px] text-navy ml-[4px]">{r.editions} år</span>
+                      <span className="font-display text-[14px] text-navy ml-[6px]">{r.editions} år</span>
                     </div>
                   ))}
                 </div>
                 <div className="divide-y divide-navy/5">
-                  {stats.courseStats.allEditionsRunners.slice(3, 6).map((r, i) => (
-                    <div key={i} className="flex items-center px-[8px] py-[4px] text-[11px]">
-                      <span className="font-display text-[13px] text-red w-[16px]">{i + 4}</span>
+                  {stats.courseStats.allEditionsRunners.slice(4, 8).map((r, i) => (
+                    <div key={i} className="flex items-center px-[10px] py-[6px] text-[12px]">
+                      <span className="font-display text-[14px] text-red w-[18px]">{i + 5}</span>
                       <span className="flex-1 truncate">{r.name}</span>
-                      <span className="font-display text-[13px] text-navy ml-[4px]">{r.editions} år</span>
+                      <span className="font-display text-[14px] text-navy ml-[6px]">{r.editions} år</span>
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Participants per year chart */}
+          <section>
+            <SectionTitle>Deltakere per år</SectionTitle>
+            <div className="bg-white rounded-[6px] border border-navy/10 mt-[10px] p-[12px] overflow-hidden">
+              <div className="flex items-end gap-[6px] h-[80px]">
+                {stats.yearStats.map((ys) => {
+                  const maxCount = Math.max(...stats.yearStats.map((y) => y.totalParticipants));
+                  const heightPct = (ys.totalParticipants / maxCount) * 100;
+                  return (
+                    <div key={ys.year} className="flex-1 flex flex-col items-center gap-[2px]">
+                      <span className="text-[8px] text-navy/70">{ys.totalParticipants}</span>
+                      <div
+                        className="w-full bg-red rounded-t-[2px]"
+                        style={{ height: `${heightPct}%` }}
+                      />
+                      <span className="text-[8px] text-navy/60">{ys.year.toString().slice(-2)}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </section>
