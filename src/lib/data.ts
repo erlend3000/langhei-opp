@@ -91,6 +91,15 @@ export interface FunFacts {
   oldestEdition: number;
   newestEdition: number;
   totalParticipantsAllTime: number;
+  totalKmRun: number;
+  totalElevationGain: number;
+  everestMultiple: number;
+  biggestFamily: { lastName: string; members: number; participations: number };
+  recordSpeedKmh: number;
+  firstEditionWinnerTime: string;
+  recordImprovedBy: number;
+  mostConsistent: { name: string; variance: string; races: number };
+  closestFinish: { names: string[]; time: string; year: number };
 }
 
 function parseTime(timeStr: string): number {
@@ -343,6 +352,90 @@ function computeFunFacts(results: Result[]): FunFacts {
 
   const years = [...new Set(results.map((r) => r.year))].sort();
 
+  // Total distance and elevation
+  const totalKmRun = Math.round((results.length * COURSE.length) / 1000);
+  const totalElevationGain = results.length * COURSE.grossElevationGain;
+  const everestMultiple = parseFloat((totalElevationGain / 8849).toFixed(1));
+
+  // Biggest family (by last name)
+  const familyCount: Record<string, Set<string>> = {};
+  const familyParticipations: Record<string, number> = {};
+  for (const r of results) {
+    const ln = r.lastName.trim();
+    if (!familyCount[ln]) familyCount[ln] = new Set();
+    familyCount[ln].add(r.firstName.trim());
+    familyParticipations[ln] = (familyParticipations[ln] || 0) + 1;
+  }
+  const biggestFamilyEntry = Object.entries(familyCount).sort(
+    (a, b) => b[1].size - a[1].size
+  )[0];
+
+  // Record speed in km/h
+  const fastestTime = results.reduce((min, r) =>
+    r.timeInSeconds < min.timeInSeconds ? r : min
+  );
+  const recordSpeedKmh = parseFloat(
+    ((COURSE.length / 1000) / (fastestTime.timeInSeconds / 3600)).toFixed(1)
+  );
+
+  // First edition winner vs current record
+  const firstEditionResults = results
+    .filter((r) => r.year === years[0] && r.class === "Mann")
+    .sort((a, b) => a.timeInSeconds - b.timeInSeconds);
+  const firstEditionWinnerTime = firstEditionResults[0]?.time || "";
+  const recordImprovedBy = firstEditionResults[0]
+    ? firstEditionResults[0].timeInSeconds - fastestTime.timeInSeconds
+    : 0;
+
+  // Most consistent runner (lowest time variance with 3+ races in same class)
+  let mostConsistent = { name: "", variance: "", races: 0 };
+  let lowestVariance = Infinity;
+  for (const [name, pResults] of Object.entries(personResults)) {
+    const adultResults = pResults.filter(
+      (r) => r.class === "Mann" || r.class === "Dame"
+    );
+    if (adultResults.length < 3) continue;
+    const times = adultResults.map((r) => r.timeInSeconds);
+    const avg = times.reduce((s, t) => s + t, 0) / times.length;
+    const variance = Math.sqrt(
+      times.reduce((s, t) => s + (t - avg) ** 2, 0) / times.length
+    );
+    if (variance < lowestVariance) {
+      lowestVariance = variance;
+      mostConsistent = {
+        name,
+        variance: `±${Math.round(variance)} sek`,
+        races: adultResults.length,
+      };
+    }
+  }
+
+  // Closest finish (same time, same year, same class)
+  let closestFinish = { names: ["", ""], time: "", year: 0 };
+  const byYearClass: Record<string, Result[]> = {};
+  for (const r of results) {
+    const key = `${r.year}-${r.class}`;
+    if (!byYearClass[key]) byYearClass[key] = [];
+    byYearClass[key].push(r);
+  }
+  for (const group of Object.values(byYearClass)) {
+    const sorted = [...group].sort((a, b) => a.timeInSeconds - b.timeInSeconds);
+    for (let i = 0; i < sorted.length - 1; i++) {
+      if (
+        sorted[i].timeInSeconds === sorted[i + 1].timeInSeconds &&
+        getFullName(sorted[i]) !== getFullName(sorted[i + 1])
+      ) {
+        closestFinish = {
+          names: [getFullName(sorted[i]), getFullName(sorted[i + 1])],
+          time: sorted[i].time,
+          year: sorted[i].year,
+        };
+        break;
+      }
+    }
+    if (closestFinish.year) break;
+  }
+
   return {
     mostParticipations: {
       name: mostParticipationsEntry[0],
@@ -352,6 +445,19 @@ function computeFunFacts(results: Result[]): FunFacts {
     oldestEdition: years[0],
     newestEdition: years[years.length - 1],
     totalParticipantsAllTime: results.length,
+    totalKmRun,
+    totalElevationGain,
+    everestMultiple,
+    biggestFamily: {
+      lastName: biggestFamilyEntry[0],
+      members: biggestFamilyEntry[1].size,
+      participations: familyParticipations[biggestFamilyEntry[0]],
+    },
+    recordSpeedKmh,
+    firstEditionWinnerTime,
+    recordImprovedBy,
+    mostConsistent,
+    closestFinish,
   };
 }
 

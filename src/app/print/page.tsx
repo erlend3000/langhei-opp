@@ -24,16 +24,16 @@ export default function PrintPoster() {
         </div>
         <div className="flex items-center gap-[24px]">
           <div className="text-right text-[12px] text-cream/80">
-            <p>{COURSE.length} m &middot; {COURSE.netElevationGain} m stigning &middot; {COURSE.averageGradient.toFixed(1)}% snitt</p>
+            <p>{COURSE.length} m &middot; {COURSE.grossElevationGain} m stigning &middot; {COURSE.averageGradient.toFixed(1)}% snitt</p>
           </div>
           <JubileumsBadge />
         </div>
       </header>
 
-      {/* Main content - use CSS grid for predictable column sizing */}
-      <div className="flex-1 grid grid-cols-[1fr_1.4fr_1.2fr] gap-[24px] px-[30px] py-[24px] overflow-hidden">
-        {/* Left column - Course data + key numbers + fun facts */}
-        <div className="flex flex-col gap-[18px] overflow-hidden">
+      {/* Main content - three columns */}
+      <div className="flex-1 grid grid-cols-[1.3fr_1.6fr_1fr] gap-[28px] px-[30px] py-[24px] overflow-hidden">
+        {/* LEFT: Course + Records + Key numbers */}
+        <div className="flex flex-col gap-[20px] overflow-hidden">
           {/* Course profile */}
           <section>
             <SectionTitle>Løypa</SectionTitle>
@@ -53,48 +53,10 @@ export default function PrintPoster() {
             </div>
           </section>
 
-          {/* Key numbers */}
-          <section>
-            <SectionTitle>Nøkkeltall</SectionTitle>
-            <div className="grid grid-cols-3 gap-[6px] mt-[8px]">
-              <MiniStat value={stats.totalResults.toString()} label="Reg. tider" />
-              <MiniStat value={stats.totalUniqueRunners.toString()} label="Unike løpere" />
-              <MiniStat value={stats.yearsArranged.length.toString()} label="År arrangert" />
-              <MiniStat value={stats.courseStats.medianTime} label="Mediantid" />
-              <MiniStat value={`${stats.courseStats.genderPercentage.menPct}/${stats.courseStats.genderPercentage.womenPct}%`} label="M/K" />
-              <MiniStat value={stats.courseStats.under10min.toString()} label="Under 10 min" />
-            </div>
-          </section>
-
-          {/* Fun facts */}
-          <section className="flex-1">
-            <SectionTitle>Visste du at...</SectionTitle>
-            <div className="space-y-[6px] mt-[8px]">
-              <FunFactCard
-                text={`${stats.funFacts.mostParticipations.name} har deltatt hele ${stats.funFacts.mostParticipations.count} ganger`}
-              />
-              <FunFactCard
-                text={`Størst forbedring: ${stats.funFacts.biggestImprovement.name} (${stats.funFacts.biggestImprovement.from} → ${stats.funFacts.biggestImprovement.to})`}
-              />
-              <FunFactCard
-                text={`Vertikal fart ved rekord: ${stats.courseStats.recordVerticalSpeed} m/t (menn) / ${stats.courseStats.recordVerticalSpeedWomen} m/t (kvinner)`}
-              />
-              <FunFactCard
-                text={`Største felt: ${stats.courseStats.largestField.count} deltakere (${stats.courseStats.largestField.year})`}
-              />
-              <FunFactCard
-                text={`Ikke arrangert 2020, 2021 og 2023`}
-              />
-            </div>
-          </section>
-        </div>
-
-        {/* Center column - Records + Top 10 */}
-        <div className="flex flex-col gap-[20px] overflow-hidden">
           {/* Records */}
           <section>
             <SectionTitle>Løyperekorder</SectionTitle>
-            <div className="grid grid-cols-4 gap-[12px] mt-[10px]">
+            <div className="grid grid-cols-2 gap-[8px] mt-[8px]">
               {mainClasses.map((cls) => {
                 const record = stats.classRecords.find((cr) => cr.class === cls);
                 if (!record) return null;
@@ -111,39 +73,58 @@ export default function PrintPoster() {
             </div>
           </section>
 
-          {/* Top 10 all time */}
+          {/* Key numbers */}
           <section>
-            <SectionTitle>Topp 10 – Alle tider</SectionTitle>
-            <div className="bg-white rounded-[6px] border border-navy/10 mt-[10px] overflow-hidden">
-              <table className="w-full text-[12px]">
-                <thead>
-                  <tr className="bg-navy text-white text-left">
-                    <th className="px-[10px] py-[8px] font-medium w-[28px]">#</th>
-                    <th className="px-[10px] py-[8px] font-medium">Tid</th>
-                    <th className="px-[10px] py-[8px] font-medium">Navn</th>
-                    <th className="px-[10px] py-[8px] font-medium">År</th>
-                    <th className="px-[10px] py-[8px] font-medium">Klasse</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.topTenAllTime.map((r, i) => (
-                    <tr
-                      key={i}
-                      className={i % 2 === 0 ? "bg-cream-light/50" : "bg-white"}
-                    >
-                      <td className="px-[10px] py-[7px] font-display text-[16px] text-red">
-                        {i + 1}
-                      </td>
-                      <td className="px-[10px] py-[7px] font-display text-[18px]">
-                        {r.time}
-                      </td>
-                      <td className="px-[10px] py-[7px]">{getFullName(r)}</td>
-                      <td className="px-[10px] py-[7px]">{r.year}</td>
-                      <td className="px-[10px] py-[7px]">{r.class}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <SectionTitle>Nøkkeltall</SectionTitle>
+            <div className="grid grid-cols-3 gap-[6px] mt-[8px]">
+              <MiniStat value={stats.totalResults.toString()} label="Reg. tider" />
+              <MiniStat value={stats.totalUniqueRunners.toString()} label="Unike løpere" />
+              <MiniStat value={stats.yearsArranged.length.toString()} label="År arrangert" />
+              <MiniStat value={stats.courseStats.medianTime} label="Mediantid" />
+              <MiniStat value={`${stats.courseStats.genderPercentage.menPct}/${stats.courseStats.genderPercentage.womenPct}%`} label="M/K (voksne)" />
+              <MiniStat value={stats.courseStats.under10min.toString()} label="Under 10 min" />
+            </div>
+          </section>
+        </div>
+
+        {/* CENTER: Curiosa + Trofaste */}
+        <div className="flex flex-col gap-[20px] overflow-hidden">
+          {/* Visste du at */}
+          <section>
+            <SectionTitle>Visste du at...</SectionTitle>
+            <div className="grid grid-cols-2 gap-[8px] mt-[10px]">
+              <FunFactCard
+                title="Samlet distanse"
+                text={`Alle løpere til sammen har tilbakelagt ${stats.funFacts.totalKmRun} km i Langhei Opp`}
+              />
+              <FunFactCard
+                title="Høydemeter"
+                text={`Totalt ${stats.funFacts.totalElevationGain.toLocaleString()} m stigning – det er ${stats.funFacts.everestMultiple}× Mount Everest`}
+              />
+              <FunFactCard
+                title="Størst forbedring"
+                text={`${stats.funFacts.biggestImprovement.name} gikk fra ${stats.funFacts.biggestImprovement.from} til ${stats.funFacts.biggestImprovement.to}`}
+              />
+              <FunFactCard
+                title="Mest konsistent"
+                text={`${stats.funFacts.mostConsistent.name} varierer bare ${stats.funFacts.mostConsistent.variance} over ${stats.funFacts.mostConsistent.races} løp`}
+              />
+              <FunFactCard
+                title="Største familie"
+                text={`Familien ${stats.funFacts.biggestFamily.lastName}: ${stats.funFacts.biggestFamily.members} ulike medlemmer, ${stats.funFacts.biggestFamily.participations} deltakelser`}
+              />
+              <FunFactCard
+                title="Rekordfart"
+                text={`${stats.funFacts.recordSpeedKmh} km/t – vertikal hastighet ${stats.courseStats.recordVerticalSpeed} m/t`}
+              />
+              <FunFactCard
+                title="Rekordutvikling"
+                text={`Første vinner (2013): ${stats.funFacts.firstEditionWinnerTime}. Rekorden er forbedret med ${stats.funFacts.recordImprovedBy} sek siden`}
+              />
+              <FunFactCard
+                title="Nærmeste innkomst"
+                text={`${stats.funFacts.closestFinish.names[0]} og ${stats.funFacts.closestFinish.names[1]} – begge på ${stats.funFacts.closestFinish.time} (${stats.funFacts.closestFinish.year})`}
+              />
             </div>
           </section>
 
@@ -153,8 +134,8 @@ export default function PrintPoster() {
             <div className="bg-white rounded-[6px] border border-navy/10 mt-[10px] overflow-hidden">
               <div className="grid grid-cols-2 divide-x divide-navy/5">
                 <div className="divide-y divide-navy/5">
-                  {stats.courseStats.allEditionsRunners.slice(0, 4).map((r, i) => (
-                    <div key={i} className="flex items-center px-[10px] py-[6px] text-[12px]">
+                  {stats.courseStats.allEditionsRunners.slice(0, 5).map((r, i) => (
+                    <div key={i} className="flex items-center px-[10px] py-[7px] text-[12px]">
                       <span className="font-display text-[14px] text-red w-[18px]">{i + 1}</span>
                       <span className="flex-1 truncate">{r.name}</span>
                       <span className="font-display text-[14px] text-navy ml-[6px]">{r.editions} år</span>
@@ -162,9 +143,9 @@ export default function PrintPoster() {
                   ))}
                 </div>
                 <div className="divide-y divide-navy/5">
-                  {stats.courseStats.allEditionsRunners.slice(4, 8).map((r, i) => (
-                    <div key={i} className="flex items-center px-[10px] py-[6px] text-[12px]">
-                      <span className="font-display text-[14px] text-red w-[18px]">{i + 5}</span>
+                  {stats.courseStats.allEditionsRunners.slice(5, 10).map((r, i) => (
+                    <div key={i} className="flex items-center px-[10px] py-[7px] text-[12px]">
+                      <span className="font-display text-[14px] text-red w-[18px]">{i + 6}</span>
                       <span className="flex-1 truncate">{r.name}</span>
                       <span className="font-display text-[14px] text-navy ml-[6px]">{r.editions} år</span>
                     </div>
@@ -174,31 +155,15 @@ export default function PrintPoster() {
             </div>
           </section>
 
-          {/* Participants per year chart */}
-          <section>
-            <SectionTitle>Deltakere per år</SectionTitle>
-            <div className="bg-white rounded-[6px] border border-navy/10 mt-[10px] p-[12px] overflow-hidden">
-              <div className="flex items-end gap-[6px] h-[80px]">
-                {stats.yearStats.map((ys) => {
-                  const maxCount = Math.max(...stats.yearStats.map((y) => y.totalParticipants));
-                  const heightPct = (ys.totalParticipants / maxCount) * 100;
-                  return (
-                    <div key={ys.year} className="flex-1 flex flex-col items-center gap-[2px]">
-                      <span className="text-[8px] text-navy/70">{ys.totalParticipants}</span>
-                      <div
-                        className="w-full bg-red rounded-t-[2px]"
-                        style={{ height: `${heightPct}%` }}
-                      />
-                      <span className="text-[8px] text-navy/60">{ys.year.toString().slice(-2)}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
+          {/* Extra note */}
+          <div className="mt-auto bg-navy/5 rounded-[6px] px-[12px] py-[10px]">
+            <p className="text-[11px] text-navy/70 text-center">
+              Ikke arrangert i 2020, 2021 og 2023 &middot; Løpet arrangeres årlig av Gjeving IL
+            </p>
+          </div>
         </div>
 
-        {/* Right column - Top 5 per class */}
+        {/* RIGHT: Top 5 per class */}
         <div className="flex flex-col gap-[10px] overflow-hidden">
           <SectionTitle>Topp 5 per klasse</SectionTitle>
           {mainClasses.map((cls) => (
@@ -212,7 +177,7 @@ export default function PrintPoster() {
                 {(stats.topTenByClass[cls] || []).slice(0, 5).map((r, i) => (
                   <div
                     key={i}
-                    className="flex items-center px-[10px] py-[3px] text-[10px]"
+                    className="flex items-center px-[10px] py-[4px] text-[10px]"
                   >
                     <span className="font-display text-[12px] text-red w-[14px]">
                       {i + 1}
@@ -234,10 +199,9 @@ export default function PrintPoster() {
       <footer className="bg-navy text-white px-[30px] py-[10px] flex items-center justify-between shrink-0">
         <p className="text-[11px] text-cream/80">
           Data fra {stats.yearsArranged.length} arrangerte år ({stats.yearsArranged[0]}–{stats.yearsArranged[stats.yearsArranged.length - 1]})
-          &middot; Ikke arrangert 2020, 2021, 2023
         </p>
         <p className="text-[11px] text-cream/60">
-          Alle resultater og mer statistikk: langhei-opp.vercel.app
+          Søk i alle resultater: langhei-opp.vercel.app
         </p>
       </footer>
     </div>
@@ -277,7 +241,7 @@ function RecordCard({
       <div className="absolute top-0 right-0 bg-red text-white text-[9px] px-[6px] py-[2px] rounded-bl font-medium">
         {classLabel}
       </div>
-      <div className="font-display text-[28px] text-navy leading-none">
+      <div className="font-display text-[30px] text-navy leading-none">
         {time}
       </div>
       <div className="text-[10px] mt-[6px] font-medium truncate">{name}</div>
@@ -286,10 +250,11 @@ function RecordCard({
   );
 }
 
-function FunFactCard({ text }: { text: string }) {
+function FunFactCard({ title, text }: { title: string; text: string }) {
   return (
-    <div className="bg-white rounded-[4px] px-[8px] py-[5px] border border-navy/10">
-      <p className="text-[10px] text-navy/80 leading-snug">{text}</p>
+    <div className="bg-white rounded-[6px] px-[10px] py-[8px] border border-navy/10">
+      <p className="font-display text-[12px] text-red leading-none">{title}</p>
+      <p className="text-[10px] text-navy/80 leading-snug mt-[4px]">{text}</p>
     </div>
   );
 }
