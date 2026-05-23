@@ -13,11 +13,13 @@ interface PersonalResult {
 export function PersonalStats({ allResults }: { allResults: Result[] }) {
   const [search, setSearch] = useState("");
   const [person, setPerson] = useState<PersonalResult | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     if (!search.trim()) return;
 
+    setHasSearched(true);
     const normalizedSearch = search.toLowerCase().trim();
     const personResults = allResults.filter((r) => {
       const fullName = `${r.firstName} ${r.lastName}`.toLowerCase().trim();
@@ -117,7 +119,7 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
         </div>
       )}
 
-      {!person && search && (
+      {!person && hasSearched && (
         <p className="text-sm text-navy/60 italic">
           Ingen resultater funnet for «{search}». Prøv et annet navn.
         </p>

@@ -1,61 +1,101 @@
 export function CourseProfile({ className = "" }: { className?: string }) {
-  // Approximated from the Løypeprofil.jpeg - elevation profile from ~30m to ~90m over ~2km
-  const points = [
-    [0, 30],
-    [0.05, 32],
-    [0.1, 35],
-    [0.15, 38],
-    [0.2, 42],
-    [0.25, 48],
-    [0.3, 52],
-    [0.35, 55],
-    [0.4, 60],
-    [0.45, 65],
-    [0.5, 62],
-    [0.55, 58],
-    [0.6, 55],
-    [0.65, 57],
-    [0.7, 60],
-    [0.75, 58],
-    [0.8, 55],
-    [0.85, 53],
-    [0.9, 55],
-    [0.95, 58],
-    [1.0, 60],
-    [1.05, 57],
-    [1.1, 55],
-    [1.15, 53],
-    [1.2, 52],
-    [1.25, 54],
-    [1.3, 56],
-    [1.35, 58],
-    [1.4, 60],
-    [1.45, 62],
-    [1.5, 60],
-    [1.55, 58],
-    [1.6, 60],
-    [1.65, 63],
-    [1.7, 67],
-    [1.75, 72],
-    [1.8, 78],
-    [1.85, 82],
-    [1.9, 85],
-    [1.95, 88],
-    [2.0, 90],
+  // Detailed elevation profile traced from GPS data (Løypeprofil.jpeg)
+  // ~70 points following the actual contour closely
+  const points: [number, number][] = [
+    [0.00, 31],
+    [0.03, 31],
+    [0.06, 32],
+    [0.09, 33],
+    [0.12, 36],
+    [0.15, 39],
+    [0.18, 42],
+    [0.21, 45],
+    [0.24, 48],
+    [0.27, 50],
+    [0.30, 53],
+    [0.33, 56],
+    [0.35, 54],
+    [0.37, 50],
+    [0.39, 48],
+    [0.41, 50],
+    [0.43, 54],
+    [0.45, 58],
+    [0.47, 55],
+    [0.48, 60],
+    [0.50, 65],
+    [0.52, 62],
+    [0.54, 58],
+    [0.56, 54],
+    [0.58, 50],
+    [0.61, 47],
+    [0.64, 44],
+    [0.67, 45],
+    [0.70, 49],
+    [0.72, 47],
+    [0.75, 49],
+    [0.78, 47],
+    [0.80, 45],
+    [0.83, 47],
+    [0.86, 50],
+    [0.89, 52],
+    [0.91, 50],
+    [0.94, 51],
+    [0.97, 54],
+    [1.00, 52],
+    [1.03, 50],
+    [1.06, 53],
+    [1.08, 55],
+    [1.11, 52],
+    [1.14, 50],
+    [1.17, 53],
+    [1.20, 51],
+    [1.23, 50],
+    [1.26, 52],
+    [1.29, 54],
+    [1.32, 52],
+    [1.35, 53],
+    [1.38, 55],
+    [1.41, 53],
+    [1.44, 54],
+    [1.47, 55],
+    [1.50, 55],
+    [1.53, 56],
+    [1.56, 55],
+    [1.59, 58],
+    [1.62, 62],
+    [1.65, 66],
+    [1.68, 70],
+    [1.71, 73],
+    [1.74, 75],
+    [1.76, 72],
+    [1.79, 70],
+    [1.82, 73],
+    [1.85, 77],
+    [1.88, 80],
+    [1.91, 82],
+    [1.94, 84],
+    [1.97, 86],
+    [2.00, 84],
+    [2.03, 83],
+    [2.06, 85],
+    [2.09, 87],
+    [2.12, 88],
+    [2.15, 88],
+    [2.18, 88],
   ];
 
   const width = 400;
-  const height = 80;
-  const padding = { top: 5, bottom: 20, left: 30, right: 10 };
+  const height = 100;
+  const padding = { top: 8, bottom: 22, left: 32, right: 10 };
 
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
 
-  const minElev = 20;
-  const maxElev = 100;
+  const totalDistance = 2.18;
+  const minElev = 25;
+  const maxElev = 95;
 
-  const scaleX = (km: number) =>
-    padding.left + (km / 2.0) * chartWidth;
+  const scaleX = (km: number) => padding.left + (km / totalDistance) * chartWidth;
   const scaleY = (elev: number) =>
     padding.top + chartHeight - ((elev - minElev) / (maxElev - minElev)) * chartHeight;
 
@@ -65,7 +105,7 @@ export function CourseProfile({ className = "" }: { className?: string }) {
 
   const areaPath =
     pathData +
-    ` L ${scaleX(2.0).toFixed(1)} ${scaleY(minElev).toFixed(1)} L ${scaleX(0).toFixed(1)} ${scaleY(minElev).toFixed(1)} Z`;
+    ` L ${scaleX(totalDistance).toFixed(1)} ${scaleY(minElev).toFixed(1)} L ${scaleX(0).toFixed(1)} ${scaleY(minElev).toFixed(1)} Z`;
 
   return (
     <svg
@@ -75,8 +115,8 @@ export function CourseProfile({ className = "" }: { className?: string }) {
     >
       <defs>
         <linearGradient id="profileGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#d63a3a" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#d63a3a" stopOpacity="0.3" />
+          <stop offset="0%" stopColor="#d63a3a" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#d63a3a" stopOpacity="0.15" />
         </linearGradient>
       </defs>
 
@@ -84,7 +124,7 @@ export function CourseProfile({ className = "" }: { className?: string }) {
       <path d={areaPath} fill="url(#profileGradient)" />
 
       {/* Profile line */}
-      <path d={pathData} fill="none" stroke="#d63a3a" strokeWidth="1.5" />
+      <path d={pathData} fill="none" stroke="#d63a3a" strokeWidth="1.5" strokeLinejoin="round" />
 
       {/* Y axis labels */}
       {[30, 50, 70, 90].map((elev) => (
@@ -93,9 +133,9 @@ export function CourseProfile({ className = "" }: { className?: string }) {
             x={padding.left - 4}
             y={scaleY(elev) + 3}
             textAnchor="end"
-            fontSize="6"
+            fontSize="7"
             fill="#1b2a4a"
-            opacity="0.7"
+            opacity="0.6"
           >
             {elev}m
           </text>
@@ -105,7 +145,7 @@ export function CourseProfile({ className = "" }: { className?: string }) {
             x2={width - padding.right}
             y2={scaleY(elev)}
             stroke="#1b2a4a"
-            strokeOpacity="0.1"
+            strokeOpacity="0.08"
             strokeWidth="0.5"
           />
         </g>
@@ -116,19 +156,19 @@ export function CourseProfile({ className = "" }: { className?: string }) {
         <text
           key={km}
           x={scaleX(km)}
-          y={height - 4}
+          y={height - 5}
           textAnchor="middle"
-          fontSize="6"
+          fontSize="7"
           fill="#1b2a4a"
-          opacity="0.7"
+          opacity="0.6"
         >
-          {km.toFixed(1)} km
+          {km.toFixed(1)}
         </text>
       ))}
 
-      {/* Start and end markers */}
-      <circle cx={scaleX(0)} cy={scaleY(30)} r="2" fill="#1b2a4a" />
-      <circle cx={scaleX(2.0)} cy={scaleY(90)} r="2" fill="#d63a3a" />
+      {/* Start and finish markers */}
+      <circle cx={scaleX(0)} cy={scaleY(31)} r="2.5" fill="#1b2a4a" />
+      <circle cx={scaleX(2.18)} cy={scaleY(88)} r="2.5" fill="#d63a3a" />
     </svg>
   );
 }
