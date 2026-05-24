@@ -6,10 +6,10 @@ export function CourseProfile({ className = "" }: { className?: string }) {
   const fillBottom = 700;
 
   // ViewBox with padding for labels
-  const vbX = -380;
+  const vbX = -440;
   const vbY = -20;
-  const vbW = 3960;
-  const vbH = 1000;
+  const vbW = 4020;
+  const vbH = 950;
 
   // Y mapping: SVG y=52 → 88moh (top), y=596 → 31moh (bottom)
   const pxPerMeter = (596 - 52) / (88 - 31);
@@ -58,8 +58,8 @@ export function CourseProfile({ className = "" }: { className?: string }) {
                 stroke="#ddd" strokeWidth="2"
               />
               <text
-                x="-60" y={y + 22}
-                fill="#666" fontSize="65" fontFamily="system-ui, sans-serif"
+                x="-110" y={y + 18}
+                fill="#666" fontSize="56" fontFamily="system-ui, sans-serif"
                 textAnchor="end"
               >
                 {label}
@@ -79,7 +79,7 @@ export function CourseProfile({ className = "" }: { className?: string }) {
           d={PROFILE_PATH}
           fill="none"
           stroke="#cc1a1a"
-          strokeWidth="14"
+          strokeWidth="10"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -96,8 +96,8 @@ export function CourseProfile({ className = "" }: { className?: string }) {
           return (
             <text
               key={label}
-              x={x} y={900}
-              fill="#666" fontSize="65" fontFamily="system-ui, sans-serif"
+              x={x} y={860}
+              fill="#666" fontSize="56" fontFamily="system-ui, sans-serif"
               textAnchor="middle"
             >
               {label}
