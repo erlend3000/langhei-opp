@@ -2,6 +2,7 @@ import { parseCSV, computeStats, getFullName, COURSE } from "@/lib/data";
 import { ResultTable } from "@/components/ResultTable";
 import { PersonalStats } from "@/components/PersonalStats";
 import { CourseProfile } from "@/components/CourseProfile";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -12,38 +13,57 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero header */}
-      <header className="bg-navy text-white">
-        <div className="max-w-6xl mx-auto px-6 py-10">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="font-display text-6xl md:text-7xl tracking-wide leading-none">
-                LANGHEI OPP
-              </h1>
-              <p className="text-cream mt-2 text-lg">
-                Alle resultater fra motbakkeløpet i Gjeving &middot; Siden 2013
-              </p>
+      <main className="max-w-6xl mx-auto px-6 pt-6 pb-8 space-y-10">
+        {/* Hero: Logo + key stats */}
+        <section className="relative">
+          <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 items-start">
+            {/* Logo */}
+            <div className="relative z-0">
+              <Image
+                src="/images/Logo_langhei_opp.png"
+                alt="Langhei Opp"
+                width={800}
+                height={800}
+                className="w-full max-w-[280px] h-auto"
+                priority
+              />
             </div>
-            <div className="hidden md:flex flex-col items-center">
-              <div className="w-20 h-20 rounded-full border-2 border-white/60 flex flex-col items-center justify-center">
-                <span className="text-[9px] text-cream/80">GJEVING IL</span>
-                <span className="font-display text-2xl leading-none">100</span>
-                <span className="text-[9px] text-cream/80">ÅR</span>
+
+            {/* Key stats */}
+            <div className="relative z-10 -mt-0 md:-ml-6">
+              <h2 className="font-display text-2xl md:text-3xl text-navy mb-4 tracking-wide">
+                NORGES SNILLESTE MOTBAKKELØP
+              </h2>
+              <div className="grid grid-cols-3 gap-3">
+                <StatBox value={stats.totalResults.toString()} label="Registrerte tider" />
+                <StatBox value={stats.totalUniqueRunners.toString()} label="Unike løpere" />
+                <StatBox value={stats.yearsArranged.length.toString()} label="År arrangert" />
+                <StatBox value={`${COURSE.length} m`} label="Løypelengde" />
+                <StatBox value={`${COURSE.grossElevationGain} m`} label="Brutto stigning" />
+                <StatBox value={stats.courseStats.medianTime} label="Mediantid" />
               </div>
             </div>
           </div>
-        </div>
-      </header>
+        </section>
 
-      <main className="max-w-6xl mx-auto px-6 py-8 space-y-10">
-        {/* Key stats bar */}
-        <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <StatBox value={stats.totalResults.toString()} label="Registrerte tider" />
-          <StatBox value={stats.totalUniqueRunners.toString()} label="Unike løpere" />
-          <StatBox value={stats.yearsArranged.length.toString()} label="År arrangert" />
-          <StatBox value={`${COURSE.length} m`} label="Løypelengde" />
-          <StatBox value={`${COURSE.grossElevationGain} m`} label="Brutto stigning" />
-          <StatBox value={stats.courseStats.medianTime} label="Mediantid" />
+        {/* Course info */}
+        <section className="bg-white rounded-xl border border-navy/10 p-6">
+          <h2 className="font-display text-3xl text-navy border-b-2 border-red pb-1 mb-4">
+            LØYPA
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6">
+            <div className="grid grid-cols-2 gap-3">
+              <CourseStatCard value={`${COURSE.length} m`} label="Total lengde" />
+              <CourseStatCard value={`${COURSE.netElevationGain} m`} label="Netto stigning" />
+              <CourseStatCard value={`${COURSE.grossElevationGain} m`} label="Brutto stigning" />
+              <CourseStatCard value={`${COURSE.totalDescent} m`} label="Totalt fall" />
+              <CourseStatCard value={`${COURSE.averageGradient.toFixed(1)}%`} label="Snitt helning" />
+              <CourseStatCard value={`${Math.round(COURSE.elevationPerKmGross)} m/km`} label="Høydemeter/km" />
+            </div>
+            <div className="md:w-[420px]">
+              <CourseProfile className="w-full h-48" />
+            </div>
+          </div>
         </section>
 
         {/* Records */}
@@ -76,29 +96,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Course info */}
-        <section className="bg-white rounded-xl border border-navy/10 p-6">
-          <h2 className="font-display text-3xl text-navy border-b-2 border-red pb-1 mb-4">
-            LØYPA
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <CourseProfile className="w-full h-32" />
-              <p className="text-sm text-navy/60 text-center mt-2">
-                Fra Gjeving skole ({COURSE.startElevation} moh.) til toppen av Langhei ({COURSE.finishElevation} moh.)
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <CourseStatCard value={`${COURSE.length} m`} label="Total lengde" />
-              <CourseStatCard value={`${COURSE.netElevationGain} m`} label="Netto stigning" />
-              <CourseStatCard value={`${COURSE.grossElevationGain} m`} label="Brutto stigning" />
-              <CourseStatCard value={`${COURSE.totalDescent} m`} label="Totalt fall" />
-              <CourseStatCard value={`${COURSE.averageGradient.toFixed(1)}%`} label="Snitt helning" />
-              <CourseStatCard value={`${Math.round(COURSE.elevationPerKmGross)} m/km`} label="Høydemeter/km" />
-            </div>
-          </div>
-        </section>
-
         {/* More stats */}
         <section className="bg-white rounded-xl border border-navy/10 p-6">
           <h2 className="font-display text-3xl text-navy border-b-2 border-red pb-1 mb-4">
@@ -119,7 +116,7 @@ export default function Home() {
           <h3 className="font-display text-xl text-navy mt-6 mb-2">TROFASTE LØPERE</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
             {stats.courseStats.allEditionsRunners.slice(0, 6).map((r, i) => (
-              <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cream-light/50">
+              <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cream/50">
                 <span className="font-display text-lg text-red">{i + 1}</span>
                 <span className="text-sm flex-1">{r.name}</span>
                 <span className="text-sm font-display text-navy">{r.editions} år</span>
@@ -156,7 +153,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-navy text-cream/70 py-6">
+      <footer className="bg-navy text-white/70 py-6">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-2 text-sm">
           <p>Langhei Opp &middot; Gjeving IL &middot; 100 år (1926–2026)</p>
           <p>
@@ -180,7 +177,7 @@ function StatBox({ value, label }: { value: string; label: string }) {
 
 function CourseStatCard({ value, label }: { value: string; label: string }) {
   return (
-    <div className="bg-cream-light/50 rounded-lg p-3 text-center">
+    <div className="bg-cream/50 rounded-lg p-3 text-center">
       <div className="font-display text-xl text-navy leading-none">{value}</div>
       <div className="text-[11px] text-navy/60 mt-1">{label}</div>
     </div>
