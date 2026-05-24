@@ -97,7 +97,7 @@ export function ResultTable({ results }: { results: Result[] }) {
         <select
           value={classFilter}
           onChange={(e) => setClassFilter(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-navy/20 bg-white text-sm"
+          className="px-4 pr-8 py-2 rounded-lg border border-navy/20 bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-red/50 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%23001c43%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.23%207.21a.75.75%200%20011.06.02L10%2011.168l3.71-3.938a.75.75%200%20111.08%201.04l-4.25%204.5a.75.75%200%2001-1.08%200l-4.25-4.5a.75.75%200%2001.02-1.06z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1rem]"
         >
           <option value="all">Alle klasser</option>
           {classes.map((cls) => (
@@ -109,7 +109,7 @@ export function ResultTable({ results }: { results: Result[] }) {
         <select
           value={yearFilter}
           onChange={(e) => setYearFilter(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-navy/20 bg-white text-sm"
+          className="px-4 pr-8 py-2 rounded-lg border border-navy/20 bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-red/50 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%23001c43%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.23%207.21a.75.75%200%20011.06.02L10%2011.168l3.71-3.938a.75.75%200%20111.08%201.04l-4.25%204.5a.75.75%200%2001-1.08%200l-4.25-4.5a.75.75%200%2001.02-1.06z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1rem]"
         >
           <option value="all">Alle år</option>
           {years.map((year) => (
@@ -167,7 +167,7 @@ export function ResultTable({ results }: { results: Result[] }) {
             {filtered.slice(0, 100).map((r, i) => (
               <tr
                 key={`${r.firstName}-${r.lastName}-${r.year}-${i}`}
-                className={`${i % 2 === 0 ? "bg-cream-light/30" : "bg-white"} hover:bg-cream/50 transition-colors`}
+                className={`${i % 2 === 0 ? "bg-[#fbf9f7]" : "bg-white"} hover:bg-[#f8f5f0] transition-colors`}
               >
                 <td className="px-4 py-2 font-display text-lg">{r.time}</td>
                 <td className="px-4 py-2">
@@ -185,7 +185,7 @@ export function ResultTable({ results }: { results: Result[] }) {
           </tbody>
         </table>
         {filtered.length > 100 && (
-          <div className="px-4 py-3 text-sm text-navy/60 border-t border-navy/10 bg-cream-light/30">
+          <div className="px-4 py-3 text-sm text-navy/60 border-t border-navy/10 bg-[#fbf9f7]">
             Viser 100 av {filtered.length} resultater. Bruk søk/filter for å se
             spesifikke resultater.
           </div>

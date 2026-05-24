@@ -62,7 +62,7 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
             setSearch(e.target.value);
             setHasSearched(false);
           }}
-          className="flex-1 px-4 py-2 rounded-lg border border-navy/20 bg-cream-light focus:outline-none focus:ring-2 focus:ring-red/50 text-sm"
+          className="flex-1 px-4 py-2 rounded-lg border border-navy/20 bg-[#f8f5f0] focus:outline-none focus:ring-2 focus:ring-red/50 text-sm"
         />
         <button
           type="submit"

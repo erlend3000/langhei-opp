@@ -30,8 +30,8 @@ export default function Home() {
             </div>
 
             {/* Key stats */}
-            <div className="relative z-10">
-              <h2 className="font-display text-2xl md:text-3xl text-navy border-b-2 border-red pb-1 mb-4 tracking-wide">
+            <div className="relative z-10 md:pt-[35px]">
+              <h2 className="font-display text-3xl text-navy border-b-2 border-red pb-1 mb-4">
                 NORGES SNILLESTE MOTBAKKELØP
               </h2>
               <div className="grid grid-cols-3 gap-3">
@@ -60,7 +60,7 @@ export default function Home() {
               <CourseStatCard value={`${COURSE.averageGradient.toFixed(1)}%`} label="Snitt helning" />
               <CourseStatCard value={`${Math.round(COURSE.elevationPerKmGross)} m/km`} label="Høydemeter/km" />
             </div>
-            <div className="relative h-[300px] md:h-auto">
+            <div className="relative h-[240px] md:h-auto">
               <div className="absolute inset-0">
                 <CourseProfile />
               </div>
@@ -88,10 +88,10 @@ export default function Home() {
                   <p className="font-display text-5xl text-navy leading-none">
                     {record.record.time}
                   </p>
-                  <p className="text-sm font-medium mt-3">
+                  <p className="text-base font-medium mt-4">
                     {getFullName(record.record)}
                   </p>
-                  <p className="text-xs text-navy/60">{record.record.year}</p>
+                  <p className="text-sm text-navy/60">{record.record.year}</p>
                 </div>
               );
             })}
@@ -118,10 +118,10 @@ export default function Home() {
           <h3 className="font-display text-xl text-navy mt-6 mb-2">TROFASTE LØPERE</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
             {stats.courseStats.allEditionsRunners.slice(0, 6).map((r, i) => (
-              <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cream/50">
-                <span className="font-display text-lg text-red">{i + 1}</span>
-                <span className="text-sm flex-1">{r.name}</span>
-                <span className="text-sm font-display text-navy">{r.editions} år</span>
+              <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#f8f5f0]">
+                <span className="font-display text-lg leading-none text-red translate-y-[1px]">{i + 1}</span>
+                <span className="text-sm leading-none flex-1">{r.name}</span>
+                <span className="text-base leading-none font-display text-navy translate-y-[1px]">{r.editions} år</span>
               </div>
             ))}
           </div>
@@ -179,9 +179,9 @@ function StatBox({ value, label }: { value: string; label: string }) {
 
 function CourseStatCard({ value, label }: { value: string; label: string }) {
   return (
-    <div className="bg-cream/50 rounded-lg p-3 text-center">
+    <div className="bg-[#f8f5f0] rounded-lg p-3 text-center">
       <div className="font-display text-xl text-navy leading-none">{value}</div>
-      <div className="text-[11px] text-navy/60 mt-1">{label}</div>
+      <div className="text-xs text-navy/60 mt-1">{label}</div>
     </div>
   );
 }
