@@ -60,8 +60,10 @@ export default function Home() {
               <CourseStatCard value={`${COURSE.averageGradient.toFixed(1)}%`} label="Snitt helning" />
               <CourseStatCard value={`${Math.round(COURSE.elevationPerKmGross)} m/km`} label="Høydemeter/km" />
             </div>
-            <div className="flex flex-col">
-              <CourseProfile className="w-full flex-1" />
+            <div className="relative h-[300px] md:h-auto">
+              <div className="absolute inset-0">
+                <CourseProfile />
+              </div>
             </div>
           </div>
         </section>
