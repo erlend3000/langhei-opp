@@ -1,14 +1,17 @@
 import { PROFILE_PATH } from "./profile-path";
 
 export function CourseProfile({ className = "" }: { className?: string }) {
-  // ViewBox: x range 0–3374, profile y range ~52–596
-  const vbX = -280;
+  // Profile y range: y=52 (88 moh, top) to y=596 (31 moh)
+  // Extend the fill down to y=700 (represents ~20 moh area, no label)
+  const fillBottom = 700;
+
+  // ViewBox with padding for labels
+  const vbX = -320;
   const vbY = -20;
-  const vbW = 3800;
-  const vbH = 760;
+  const vbW = 3900;
+  const vbH = 920;
 
   // Y mapping: SVG y=52 → 88moh (top), y=596 → 31moh (bottom)
-  // Elevation range: 31–88 = 57m. Grid at 30, 50, 70, 90m.
   const pxPerMeter = (596 - 52) / (88 - 31);
   const elevToY = (elev: number) => 596 - (elev - 31) * pxPerMeter;
 
@@ -22,19 +25,19 @@ export function CourseProfile({ className = "" }: { className?: string }) {
   // X-axis: total course = 2180m, SVG x range = 4–3340 (width = 3336)
   const pxPerKm = 3336 / 2.18;
   const distMarkers = [
-    { dist: 0, label: "0.0 km" },
-    { dist: 0.5, label: "0.5 km" },
-    { dist: 1.0, label: "1.0 km" },
-    { dist: 1.5, label: "1.5 km" },
-    { dist: 2.0, label: "2.0 km" },
+    { dist: 0, label: "0 m" },
+    { dist: 0.5, label: "500 m" },
+    { dist: 1.0, label: "1000 m" },
+    { dist: 1.5, label: "1500 m" },
+    { dist: 2.0, label: "2000 m" },
   ];
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative flex flex-col ${className}`}>
       <svg
         viewBox={`${vbX} ${vbY} ${vbW} ${vbH}`}
         preserveAspectRatio="xMidYMid meet"
-        className="w-full h-full"
+        className="w-full flex-1"
         aria-label="Løypeprofil Langhei Opp"
       >
         <defs>
@@ -55,8 +58,8 @@ export function CourseProfile({ className = "" }: { className?: string }) {
                 stroke="#ddd" strokeWidth="2"
               />
               <text
-                x="-30" y={y + 24}
-                fill="#666" fontSize="72" fontFamily="system-ui, sans-serif"
+                x="-40" y={y + 34}
+                fill="#666" fontSize="108" fontFamily="system-ui, sans-serif"
                 textAnchor="end"
               >
                 {label}
@@ -65,9 +68,9 @@ export function CourseProfile({ className = "" }: { className?: string }) {
           );
         })}
 
-        {/* Fill area below profile */}
+        {/* Fill area below profile - extended to fillBottom */}
         <path
-          d={`${PROFILE_PATH} L 4 600 L 3340 600 Z`}
+          d={`${PROFILE_PATH} L 4 ${fillBottom} L 3340 ${fillBottom} Z`}
           fill="url(#profileFillGrad)"
         />
 
@@ -76,7 +79,7 @@ export function CourseProfile({ className = "" }: { className?: string }) {
           d={PROFILE_PATH}
           fill="none"
           stroke="#cc1a1a"
-          strokeWidth="14"
+          strokeWidth="28"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -87,14 +90,14 @@ export function CourseProfile({ className = "" }: { className?: string }) {
         {/* End point (top right) */}
         <circle cx="3340" cy="52" r="32" fill="#cc1a1a" />
 
-        {/* X-axis distance labels */}
+        {/* X-axis distance labels - with more space below profile */}
         {distMarkers.map(({ dist, label }) => {
           const x = 4 + dist * pxPerKm;
           return (
             <text
               key={label}
-              x={x} y={680}
-              fill="#666" fontSize="72" fontFamily="system-ui, sans-serif"
+              x={x} y={830}
+              fill="#666" fontSize="108" fontFamily="system-ui, sans-serif"
               textAnchor="middle"
             >
               {label}
@@ -103,7 +106,7 @@ export function CourseProfile({ className = "" }: { className?: string }) {
         })}
       </svg>
 
-      <p className="text-center text-sm text-gray-500 mt-1 font-body">
+      <p className="text-center text-sm text-gray-500 font-body">
         Fra Gjeving skole (31 moh.) til Toppen av Langhei (88 moh.)
       </p>
     </div>

@@ -51,7 +51,7 @@ export default function Home() {
           <h2 className="font-display text-3xl text-navy border-b-2 border-red pb-1 mb-4">
             LØYPA
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6 items-stretch">
             <div className="grid grid-cols-2 gap-3 content-start">
               <CourseStatCard value={`${COURSE.length} m`} label="Total lengde" />
               <CourseStatCard value={`${COURSE.netElevationGain} m`} label="Netto stigning" />
@@ -60,8 +60,8 @@ export default function Home() {
               <CourseStatCard value={`${COURSE.averageGradient.toFixed(1)}%`} label="Snitt helning" />
               <CourseStatCard value={`${Math.round(COURSE.elevationPerKmGross)} m/km`} label="Høydemeter/km" />
             </div>
-            <div>
-              <CourseProfile className="w-full h-56" />
+            <div className="flex flex-col">
+              <CourseProfile className="w-full flex-1" />
             </div>
           </div>
         </section>
