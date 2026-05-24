@@ -23,9 +23,10 @@ export function CourseProfile({ className = "" }: { className?: string }) {
   const STROKE_WIDTH = 2.5;        // px (non-scaling)
   const FONT_SIZE = 11;            // px – konstant tekststørrelse
   const Y_TEXT_AREA = 26;          // px – plass til "90m"-teksten (mindre = mindre luft mot faktaboksene)
-  const Y_LABEL_GAP = 28;          // px – luft mellom y-labels og selve profilen
+  const Y_LABEL_GAP = 20;          // px – luft mellom y-labels og selve profilen
   const X_LABEL_HEIGHT = 14;       // px – tekst-høyde for distansetallene
-  const X_LABEL_TOP_GAP = 24;      // px – luft mellom profilbunn og distansetallene
+  const X_LABEL_TOP_GAP = 12;      // px – luft mellom profilbunn og distansetallene
+  const CIRCLE_R_PX = 6;           // px – konstant pikselradius for start/slutt-kuler
   // ==============================
 
   // Profile coords (i viewBox-enheter, må ikke endres)
@@ -46,17 +47,22 @@ export function CourseProfile({ className = "" }: { className?: string }) {
   const vbW = profileWidth + 8; // litt høyremargin til siste sirkel
   const vbH = vbW * (svgAreaHeight / svgAreaWidth);
 
-  const topSpace = profileTop - vbY;
-  const bottomMargin = 40; // viewBox-enheter under profilen til startsirkelen
-  const availableForProfile = vbH - topSpace - bottomMargin;
-  const profileScaleY = Math.max(0.8, availableForProfile / profileRange);
+  // Skaler profilen slik at FILL_BOTTOM_ORIG (≈ 20 moh) lander eksakt på viewBox-bunnen.
+  // Det gir oss alltid den røde "halen" under selve kurven, uten overflow.
+  const FILL_BOTTOM_ORIG = 700; // y i opprinnelige path-koord (≈ 20 moh) – fyllbunn
+  const vbBottom = vbY + vbH;
+  const profileScaleY = Math.max(
+    0.8,
+    (vbBottom - profileTop) / (FILL_BOTTOM_ORIG - profileTop)
+  );
 
   const scaledBottom = profileTop + profileRange * profileScaleY;
   const profileTransform = `translate(0, ${profileTop}) scale(1, ${profileScaleY}) translate(0, ${-profileTop})`;
 
-  // Fyll-path-en slutter eksakt på viewBox-bunnen (etter at transformen er anvendt)
-  // → ingen overflow nedover, selv med overflow="visible" for kulene
-  const fillBottomY = profileTop + (vbH + vbY - profileTop) / profileScaleY;
+  const fillBottomY = FILL_BOTTOM_ORIG;
+
+  // Viewbox-radius som gir konstant pikselradius uansett bredde
+  const circleRVB = svgAreaWidth > 0 ? (CIRCLE_R_PX * vbW) / svgAreaWidth : 32;
 
   const elevToY = (elev: number) =>
     profileTop + ((88 - elev) / (88 - 31)) * profileRange * profileScaleY;
@@ -83,8 +89,8 @@ export function CourseProfile({ className = "" }: { className?: string }) {
 
   return (
     <div className={`flex flex-col h-full w-full ${className}`}>
-      <p className="text-center text-sm text-gray-500 font-body mb-1">
-        Fra Gjeving skole (31 moh.) til Toppen av Langhei (88 moh.)
+      <p className="text-center text-sm text-gray-500 font-body mb-3 md:mb-1">
+        Fra Gjeving skole (31 moh.) til toppen av Langhei (88 moh.)
       </p>
 
       <div ref={containerRef} className="relative flex-1 min-h-0 w-full">
@@ -141,8 +147,8 @@ export function CourseProfile({ className = "" }: { className?: string }) {
             vectorEffect="non-scaling-stroke"
           />
 
-          <circle cx={profileLeft} cy={scaledBottom} r="32" fill="#001c43" />
-          <circle cx={profileRight} cy={profileTop} r="32" fill="#cc1a1a" />
+          <circle cx={profileLeft} cy={scaledBottom} r={circleRVB} fill="#001c43" />
+          <circle cx={profileRight} cy={profileTop} r={circleRVB} fill="#cc1a1a" />
         </svg>
 
         {/* Y-axis labels – HTML, konstant fontstørrelse */}

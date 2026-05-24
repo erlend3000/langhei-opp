@@ -40,7 +40,7 @@ export default function PrintPoster() {
             <div className="bg-white rounded-[10px] p-[16px] mt-[14px] border border-navy/10">
               <CourseProfile className="w-full h-auto" />
               <p className="text-[14px] text-navy/60 mt-[8px] text-center">
-                Gjeving skole → Toppen av Langhei
+                Gjeving skole → toppen av Langhei
               </p>
             </div>
             <div className="grid grid-cols-3 gap-[10px] mt-[14px]">
