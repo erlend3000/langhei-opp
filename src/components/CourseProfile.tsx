@@ -2,15 +2,13 @@ import { PROFILE_PATH } from "./profile-path";
 
 export function CourseProfile({ className = "" }: { className?: string }) {
   // ViewBox: x range 0–3374, profile y range ~52–596
-  // Add padding for labels on left and bottom
-  const vbX = -200;
-  const vbY = 0;
-  const vbW = 3674;
-  const vbH = 720;
+  const vbX = -280;
+  const vbY = -20;
+  const vbW = 3800;
+  const vbH = 760;
 
   // Y mapping: SVG y=52 → 88moh (top), y=596 → 31moh (bottom)
   // Elevation range: 31–88 = 57m. Grid at 30, 50, 70, 90m.
-  // Scale: (596-52) / (88-31) = 544/57 ≈ 9.54 px per meter
   const pxPerMeter = (596 - 52) / (88 - 31);
   const elevToY = (elev: number) => 596 - (elev - 31) * pxPerMeter;
 
@@ -41,9 +39,9 @@ export function CourseProfile({ className = "" }: { className?: string }) {
       >
         <defs>
           <linearGradient id="profileFillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#cc1a1a" stopOpacity="0.55" />
-            <stop offset="60%" stopColor="#cc1a1a" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#cc1a1a" stopOpacity="0.05" />
+            <stop offset="0%" stopColor="#cc1a1a" stopOpacity="0.7" />
+            <stop offset="50%" stopColor="#cc1a1a" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#cc1a1a" stopOpacity="0.25" />
           </linearGradient>
         </defs>
 
@@ -57,8 +55,8 @@ export function CourseProfile({ className = "" }: { className?: string }) {
                 stroke="#ddd" strokeWidth="2"
               />
               <text
-                x="-20" y={y + 14}
-                fill="#666" fontSize="42" fontFamily="system-ui, sans-serif"
+                x="-30" y={y + 24}
+                fill="#666" fontSize="72" fontFamily="system-ui, sans-serif"
                 textAnchor="end"
               >
                 {label}
@@ -67,31 +65,27 @@ export function CourseProfile({ className = "" }: { className?: string }) {
           );
         })}
 
-        {/* Fill area below profile - with vertical ends */}
+        {/* Fill area below profile */}
         <path
           d={`${PROFILE_PATH} L 4 600 L 3340 600 Z`}
           fill="url(#profileFillGrad)"
         />
 
-        {/* Profile stroke - thick line */}
+        {/* Profile stroke */}
         <path
           d={PROFILE_PATH}
           fill="none"
           stroke="#cc1a1a"
-          strokeWidth="8"
+          strokeWidth="14"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
 
-        {/* Vertical end caps */}
-        <line x1="4" y1="596" x2="4" y2="600" stroke="#cc1a1a" strokeWidth="8" strokeLinecap="round" />
-        <line x1="3340" y1="52" x2="3340" y2="600" stroke="none" />
-
         {/* Start point (bottom left) */}
-        <circle cx="4" cy="596" r="20" fill="#001c43" />
+        <circle cx="4" cy="596" r="32" fill="#001c43" />
 
         {/* End point (top right) */}
-        <circle cx="3340" cy="52" r="20" fill="#cc1a1a" />
+        <circle cx="3340" cy="52" r="32" fill="#cc1a1a" />
 
         {/* X-axis distance labels */}
         {distMarkers.map(({ dist, label }) => {
@@ -99,8 +93,8 @@ export function CourseProfile({ className = "" }: { className?: string }) {
           return (
             <text
               key={label}
-              x={x} y={650}
-              fill="#666" fontSize="42" fontFamily="system-ui, sans-serif"
+              x={x} y={680}
+              fill="#666" fontSize="72" fontFamily="system-ui, sans-serif"
               textAnchor="middle"
             >
               {label}

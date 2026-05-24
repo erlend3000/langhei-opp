@@ -16,7 +16,7 @@ export default function Home() {
       <main className="max-w-6xl mx-auto px-6 pt-6 pb-8 space-y-10">
         {/* Hero: Logo + key stats */}
         <section className="relative">
-          <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
             {/* Logo */}
             <div className="relative z-0">
               <Image
@@ -24,14 +24,14 @@ export default function Home() {
                 alt="Langhei Opp"
                 width={800}
                 height={800}
-                className="w-full max-w-[280px] h-auto"
+                className="w-full h-auto"
                 priority
               />
             </div>
 
             {/* Key stats */}
-            <div className="relative z-10 -mt-0 md:-ml-6">
-              <h2 className="font-display text-2xl md:text-3xl text-navy mb-4 tracking-wide">
+            <div className="relative z-10">
+              <h2 className="font-display text-2xl md:text-3xl text-navy border-b-2 border-red pb-1 mb-4 tracking-wide">
                 NORGES SNILLESTE MOTBAKKELØP
               </h2>
               <div className="grid grid-cols-3 gap-3">
@@ -51,8 +51,8 @@ export default function Home() {
           <h2 className="font-display text-3xl text-navy border-b-2 border-red pb-1 mb-4">
             LØYPA
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6">
-            <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6">
+            <div className="grid grid-cols-2 gap-3 content-start">
               <CourseStatCard value={`${COURSE.length} m`} label="Total lengde" />
               <CourseStatCard value={`${COURSE.netElevationGain} m`} label="Netto stigning" />
               <CourseStatCard value={`${COURSE.grossElevationGain} m`} label="Brutto stigning" />
@@ -60,8 +60,8 @@ export default function Home() {
               <CourseStatCard value={`${COURSE.averageGradient.toFixed(1)}%`} label="Snitt helning" />
               <CourseStatCard value={`${Math.round(COURSE.elevationPerKmGross)} m/km`} label="Høydemeter/km" />
             </div>
-            <div className="md:w-[420px]">
-              <CourseProfile className="w-full h-48" />
+            <div>
+              <CourseProfile className="w-full h-56" />
             </div>
           </div>
         </section>
