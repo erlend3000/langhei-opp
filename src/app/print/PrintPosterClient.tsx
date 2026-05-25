@@ -121,23 +121,24 @@ function PosterContent({
             <CourseMiniStat value={`${COURSE_INFO.length} m`} label="Lengde" />
             <CourseMiniStat
               value={`${COURSE_INFO.netElevationGain} m`}
-              label="Netto stig."
+              label="Netto stigning"
             />
             <CourseMiniStat
               value={`${COURSE_INFO.grossElevationGain} m`}
-              label="Brutto stig."
+              label="Bruttostigning"
             />
             <CourseMiniStat
               value={`${COURSE_INFO.averageGradient.toFixed(1)}%`}
               label="Snitt stigning"
             />
             <CourseMiniStat
-              value={`${COURSE_INFO.minElevation}–${COURSE_INFO.maxElevation}`}
+              value="moh"
               label="Moh."
+              customValue={<>{COURSE_INFO.minElevation} <span style={{ display: "inline-block", transform: "translateY(-0.1em)" }}>→</span> {COURSE_INFO.maxElevation}</>}
             />
             <CourseMiniStat
               value={`${Math.round(COURSE_INFO.elevationPerKmGross)} m/km`}
-              label="Hm/km"
+              label="Høydemeter/km"
             />
           </div>
         </section>
@@ -178,7 +179,7 @@ function PosterContent({
           >
             <MiniStat
               value={stats.totalResults.toString()}
-              label="Reg. tider"
+              label="Registrerte tider"
             />
             <MiniStat
               value={stats.totalUniqueRunners.toString()}
@@ -189,16 +190,24 @@ function PosterContent({
               label="År arrangert"
             />
             <MiniStat
+              value={`${stats.courseStats.genderPercentage.menPct}/${stats.courseStats.genderPercentage.womenPct}%`}
+              label="Menn / Kvinner"
+            />
+            <MiniStat
               value={stats.courseStats.medianTime}
               label="Mediantid"
             />
             <MiniStat
-              value={`${stats.courseStats.genderPercentage.menPct}/${stats.courseStats.genderPercentage.womenPct}%`}
-              label="M/K (voksne)"
+              value={stats.courseStats.under10min.toString()}
+              label="Løp under 10 min"
             />
             <MiniStat
-              value={stats.courseStats.under10min.toString()}
-              label="Under 10 min"
+              value={stats.courseStats.largestField.count.toString()}
+              label={`Største felt (${stats.courseStats.largestField.year})`}
+            />
+            <MiniStat
+              value={`${stats.funFacts.recordSpeedKmh} km/t`}
+              label={`Rekordfart (${stats.funFacts.recordSpeedYear})`}
             />
           </div>
         </section>
@@ -207,40 +216,48 @@ function PosterContent({
       {/* Visste du at */}
       <DraggableBox id="funfacts">
         <section className="w-full h-full flex flex-col">
-          <SectionTitle>Visste du at...</SectionTitle>
+          <SectionTitle>Visste du...</SectionTitle>
           <div
             className="grid gap-[8px] mt-[10px] flex-1 min-h-0"
             style={autoFitGrid(options.funFactMinWidth)}
           >
             <FunFactCard
               title="Samlet distanse"
-              text={`Alle deltakere har til sammen løpt ${stats.funFacts.totalKmRun} km – nesten Oslo–Trondheim!`}
+              text={`Alle deltakere har til sammen løpt ${stats.funFacts.totalKmRun} km. Nesten Oslo–Trondheim!`}
             />
             <FunFactCard
               title="Høydemeter samlet"
               text={`${stats.funFacts.totalElevationGain.toLocaleString(
                 "nb-NO"
-              )} høydemeter til sammen – ${stats.funFacts.everestMultiple}× Everest!`}
+              )} høydemeter til sammen. ${stats.funFacts.everestMultiple} × Mount Everest!`}
             />
             <FunFactCard
               title="Størst forbedring"
               text={`${stats.funFacts.biggestImprovement.name}: fra ${stats.funFacts.biggestImprovement.from} til ${stats.funFacts.biggestImprovement.to}`}
             />
             <FunFactCard
-              title="Mest konsistent"
+              title="Maskinen"
               text={`${stats.funFacts.mostConsistent.name} varierer bare ${stats.funFacts.mostConsistent.variance} over ${stats.funFacts.mostConsistent.races} løp`}
             />
             <FunFactCard
               title="Største familie"
-              text={`${stats.funFacts.biggestFamily.lastName}: ${stats.funFacts.biggestFamily.members} medlemmer, ${stats.funFacts.biggestFamily.participations} deltakelser`}
+              text={`${stats.funFacts.biggestFamily.lastName}: ${stats.funFacts.biggestFamily.members} løpere, ${stats.funFacts.biggestFamily.participations} deltakelser`}
             />
             <FunFactCard
-              title="Rekordfart"
-              text={`${stats.funFacts.recordSpeedKmh} km/t – vertikal hastighet ${stats.courseStats.recordVerticalSpeed} m/t`}
+              title="Hurtigste debut"
+              text={`${stats.funFacts.fastestDebut.name} debuterte med ${stats.funFacts.fastestDebut.time} (${stats.funFacts.fastestDebut.year}). Nær løyperekorden allerede første gang!`}
             />
             <FunFactCard
-              title="Nærmeste innkomst"
-              text={`${stats.funFacts.closestFinish.names[0]} og ${stats.funFacts.closestFinish.names[1]} – ${stats.funFacts.closestFinish.time} (${stats.funFacts.closestFinish.year})`}
+              title="Raskeste fotofinish"
+              text={`${stats.funFacts.closestFinish.time}, ${stats.funFacts.closestFinish.names[0]} og ${stats.funFacts.closestFinish.names[1]} (${stats.funFacts.closestFinish.year})`}
+            />
+            <FunFactCard
+              title="Stadig raskere"
+              text={`Første vinner løp på ${stats.funFacts.firstEditionWinnerTime}. Dagens rekord er ${Math.floor(stats.funFacts.recordImprovedBy / 60)}:${String(stats.funFacts.recordImprovedBy % 60).padStart(2, "0")} raskere!`}
+            />
+            <FunFactCard
+              title="Alle har bidratt"
+              text={`${stats.funFacts.totalParticipantsAllTime} deltakelser totalt, inkludert trim- og barneklasse`}
             />
           </div>
         </section>
@@ -418,7 +435,7 @@ function MiniStat({ value, label }: { value: string; label: string }) {
   );
 }
 
-function CourseMiniStat({ value, label }: { value: string; label: string }) {
+function CourseMiniStat({ value, label, customValue }: { value: string; label: string; customValue?: React.ReactNode }) {
   return (
     <div
       className="bg-white rounded-[8px] px-[8px] py-[8px] border border-navy/10 text-center flex flex-col justify-center min-h-0"
@@ -428,7 +445,7 @@ function CourseMiniStat({ value, label }: { value: string; label: string }) {
         className="font-display text-red leading-none"
         style={courseStatValueStyle}
       >
-        {value}
+        {customValue ?? value}
       </div>
       <div
         className="text-navy/70 mt-[3px] leading-tight"

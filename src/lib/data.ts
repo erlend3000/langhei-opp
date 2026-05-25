@@ -97,10 +97,12 @@ export interface FunFacts {
   everestMultiple: number;
   biggestFamily: { lastName: string; members: number; participations: number };
   recordSpeedKmh: number;
+  recordSpeedYear: number;
   firstEditionWinnerTime: string;
   recordImprovedBy: number;
   mostConsistent: { name: string; variance: string; races: number };
   closestFinish: { names: string[]; time: string; year: number };
+  fastestDebut: { name: string; time: string; year: number };
 }
 
 function parseTime(timeStr: string): number {
@@ -450,7 +452,7 @@ function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
     const adultResults = pResults.filter(
       (r) => r.class === "Mann" || r.class === "Dame"
     );
-    if (adultResults.length < 3) continue;
+    if (adultResults.length < 5) continue;
     const times = adultResults.map((r) => r.timeInSeconds);
     const avg = times.reduce((s, t) => s + t, 0) / times.length;
     const variance = Math.sqrt(
@@ -492,6 +494,19 @@ function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
     if (closestFinish.year) break;
   }
 
+  // Fastest debut (first race for adult runners)
+  const debutTimes: { name: string; time: string; secs: number; year: number }[] = [];
+  for (const [name, pResults] of Object.entries(personResults)) {
+    const sorted = [...pResults].sort((a, b) => a.year - b.year);
+    if (sorted[0].class === "Mann" || sorted[0].class === "Dame") {
+      debutTimes.push({ name, time: sorted[0].time, secs: sorted[0].timeInSeconds, year: sorted[0].year });
+    }
+  }
+  debutTimes.sort((a, b) => a.secs - b.secs);
+  const fastestDebut = debutTimes[0]
+    ? { name: debutTimes[0].name, time: debutTimes[0].time, year: debutTimes[0].year }
+    : { name: "", time: "", year: 0 };
+
   return {
     mostParticipations: {
       name: mostParticipationsEntry[0],
@@ -510,10 +525,12 @@ function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
       participations: familyParticipations[biggestFamilyEntry[0]],
     },
     recordSpeedKmh,
+    recordSpeedYear: fastestTime.year,
     firstEditionWinnerTime,
     recordImprovedBy,
     mostConsistent,
     closestFinish,
+    fastestDebut,
   };
 }
 

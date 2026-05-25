@@ -3,7 +3,6 @@ import { ResultTable } from "@/components/ResultTable";
 import { PersonalStats } from "@/components/PersonalStats";
 import { CourseProfile } from "@/components/CourseProfile";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Home() {
   const { timed, all } = parseAllResults();
@@ -108,15 +107,16 @@ export default function Home() {
             <CourseStatCard value={stats.courseStats.medianTime} label="Mediantid" />
             <CourseStatCard value={stats.courseStats.under10min.toString()} label="Løp under 10 min" />
             <CourseStatCard value={stats.courseStats.under15min.toString()} label="Løp under 15 min" />
-            <CourseStatCard value={`${stats.courseStats.recordVerticalSpeed} m/t`} label="Vertikal fart (rekord menn)" />
-            <CourseStatCard value={`${stats.courseStats.recordVerticalSpeedWomen} m/t`} label="Vertikal fart (rekord kvinner)" />
-            <CourseStatCard value={`${stats.courseStats.largestField.count} (${stats.courseStats.largestField.year})`} label="Største felt" />
+            <CourseStatCard value={`${stats.funFacts.recordSpeedKmh} km/t`} label={`Rekordfart (${stats.funFacts.recordSpeedYear})`} />
+            <CourseStatCard value={`${stats.courseStats.recordVerticalSpeed} m/t`} label={`Vertikal rekordfart (${stats.funFacts.recordSpeedYear})`} />
+            <CourseStatCard value={stats.courseStats.largestField.count.toString()} label={`Største felt (${stats.courseStats.largestField.year})`} />
             <CourseStatCard value={`${stats.courseStats.genderPercentage.menPct}% / ${stats.courseStats.genderPercentage.womenPct}%`} label="Menn / Kvinner" />
           </div>
 
           <p className="text-xs text-navy/50 mt-4">
-            Barneklasse 2013–2019 og trimklasse fra 2015 – uten tidtaking.
-            Disse er inkludert i deltakertall og trofaste løpere.
+            Merk: Deltakere i barneklasse (2013–2019) og trimklasse (fra 2015)
+            løper uten tidtaking. De telles likevel med i statistikken, men
+            registreringen av trimmere før 2024 er mangelfull.
           </p>
 
           {/* Most editions */}
@@ -148,25 +148,87 @@ export default function Home() {
           <ResultTable results={timed} />
         </section>
 
-        {/* Print link */}
-        <section className="text-center py-6 border-t border-navy/10">
-          <Link
-            href="/print"
-            className="inline-block px-6 py-3 bg-navy text-white rounded-lg font-medium hover:bg-navy-light transition-colors"
-          >
-            Se trykkversjon (A2-plakat)
-          </Link>
+        {/* Visste du... */}
+        <section>
+          <h2 className="font-display text-3xl text-navy border-b-2 border-red pb-1 mb-4">
+            VISSTE DU...
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <FunFactBox
+              title="Samlet distanse"
+              text={`Alle deltakere har til sammen løpt ${stats.funFacts.totalKmRun} km. Nesten Oslo–Trondheim!`}
+            />
+            <FunFactBox
+              title="Høydemeter samlet"
+              text={`${stats.funFacts.totalElevationGain.toLocaleString("nb-NO")} høydemeter til sammen. ${stats.funFacts.everestMultiple} × Mount Everest!`}
+            />
+            <FunFactBox
+              title="Størst forbedring"
+              text={`${stats.funFacts.biggestImprovement.name}: fra ${stats.funFacts.biggestImprovement.from} til ${stats.funFacts.biggestImprovement.to}`}
+            />
+            <FunFactBox
+              title="Maskinen"
+              text={`${stats.funFacts.mostConsistent.name} varierer bare ${stats.funFacts.mostConsistent.variance} over ${stats.funFacts.mostConsistent.races} løp`}
+            />
+            <FunFactBox
+              title="Største familie"
+              text={`${stats.funFacts.biggestFamily.lastName}: ${stats.funFacts.biggestFamily.members} løpere, ${stats.funFacts.biggestFamily.participations} deltakelser`}
+            />
+            <FunFactBox
+              title="Hurtigste debut"
+              text={`${stats.funFacts.fastestDebut.name} debuterte med ${stats.funFacts.fastestDebut.time} (${stats.funFacts.fastestDebut.year}). Nær løyperekorden allerede første gang!`}
+            />
+            <FunFactBox
+              title="Raskeste fotofinish"
+              text={`${stats.funFacts.closestFinish.time}, ${stats.funFacts.closestFinish.names[0]} og ${stats.funFacts.closestFinish.names[1]} (${stats.funFacts.closestFinish.year})`}
+            />
+            <FunFactBox
+              title="Stadig raskere"
+              text={`Første vinner løp på ${stats.funFacts.firstEditionWinnerTime}. Dagens rekord er ${Math.floor(stats.funFacts.recordImprovedBy / 60)}:${String(stats.funFacts.recordImprovedBy % 60).padStart(2, "0")} raskere!`}
+            />
+            <FunFactBox
+              title="Alle har bidratt"
+              text={`${stats.funFacts.totalParticipantsAllTime} deltakelser totalt, inkludert trim- og barneklasse`}
+            />
+          </div>
         </section>
+
       </main>
 
-      {/* Footer */}
-      <footer className="bg-navy text-white/70 py-6">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-2 text-sm">
-          <p>Langhei Opp &middot; Gjeving IL &middot; 100 år (1926–2026)</p>
-          <p>
-            Data fra {stats.yearsArranged.length} arrangerte år (
-            {stats.yearsArranged[0]}–{stats.yearsArranged[stats.yearsArranged.length - 1]})
-          </p>
+      {/* Kolofon */}
+      <footer className="mt-8 mb-20">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col items-center md:flex-row md:items-center md:justify-center gap-5 md:gap-8">
+          <div className="text-center md:text-right">
+            <p className="font-display text-xl md:text-2xl text-navy uppercase tracking-wide">
+              Langhei Opp {stats.yearsArranged.length} år · Gjeving IL 100 år
+            </p>
+            <p className="text-navy/60 text-sm mt-1">
+              Data fra {stats.yearsArranged.length} arrangerte år,{" "}
+              {stats.yearsArranged[0]}–{stats.yearsArranged[stats.yearsArranged.length - 1]}
+            </p>
+            <p className="text-navy/60 text-sm leading-relaxed">
+              Besøk gjerne{" "}
+              <a
+                href="https://www.facebook.com/groups/106506106186402/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-navy"
+              >
+                GIL på Facebook
+              </a>
+              . Håper vi ser deg i{" "}
+              {stats.yearsArranged[stats.yearsArranged.length - 1] + 1}!
+            </p>
+          </div>
+          <div className="relative w-28 h-28 md:w-36 md:h-36 shrink-0">
+            <Image
+              src="/images/GIL.svg"
+              alt="Gjeving IL"
+              fill
+              sizes="112px"
+              style={{ objectFit: "contain" }}
+            />
+          </div>
         </div>
       </footer>
     </div>
@@ -187,6 +249,15 @@ function CourseStatCard({ value, label }: { value: string; label: string }) {
     <div className="bg-[#f8f5f0] rounded-lg p-3 text-center">
       <div className="font-display text-xl text-navy leading-none">{value}</div>
       <div className="text-xs text-navy/60 mt-1">{label}</div>
+    </div>
+  );
+}
+
+function FunFactBox({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="bg-white rounded-xl p-5 border border-navy/10">
+      <p className="font-display text-red text-xl leading-none">{title}</p>
+      <p className="text-navy/80 text-sm leading-snug mt-2">{text}</p>
     </div>
   );
 }
