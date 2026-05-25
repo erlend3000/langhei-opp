@@ -15,22 +15,35 @@ function fuzzyScore(query: string, target: string): number {
   const q = query.toLowerCase().replace(/[-]/g, " ").trim();
   const t = target.toLowerCase().replace(/[-]/g, " ").trim();
 
-  if (t.includes(q) || q.includes(t)) return 1;
+  if (q === t) return 1;
 
   const qParts = q.split(/\s+/);
   const tParts = t.split(/\s+/);
 
   let totalScore = 0;
+  let exactPartMatches = 0;
+
   for (const qp of qParts) {
     let bestPartScore = 0;
     for (const tp of tParts) {
+      if (qp === tp) {
+        bestPartScore = 1;
+        exactPartMatches++;
+        break;
+      }
       const score = levenshteinSimilarity(qp, tp);
       if (score > bestPartScore) bestPartScore = score;
     }
     totalScore += bestPartScore;
   }
 
-  return totalScore / Math.max(qParts.length, tParts.length);
+  const baseScore = totalScore / Math.max(qParts.length, tParts.length);
+
+  // Bonus for exact word matches (prioritizes "Anne" matching firstName "Anne"
+  // over "Johannes" which merely contains "anne" as substring)
+  const exactBonus = exactPartMatches * 0.15;
+
+  return Math.min(baseScore + exactBonus, 1);
 }
 
 function levenshteinSimilarity(a: string, b: string): number {
