@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import type { Result } from "@/lib/data";
 
 interface PersonalResult {
@@ -11,10 +11,90 @@ interface PersonalResult {
   totalParticipations: number;
 }
 
+function fuzzyScore(query: string, target: string): number {
+  const q = query.toLowerCase().replace(/[-]/g, " ").trim();
+  const t = target.toLowerCase().replace(/[-]/g, " ").trim();
+
+  if (t.includes(q) || q.includes(t)) return 1;
+
+  const qParts = q.split(/\s+/);
+  const tParts = t.split(/\s+/);
+
+  let totalScore = 0;
+  for (const qp of qParts) {
+    let bestPartScore = 0;
+    for (const tp of tParts) {
+      const score = levenshteinSimilarity(qp, tp);
+      if (score > bestPartScore) bestPartScore = score;
+    }
+    totalScore += bestPartScore;
+  }
+
+  return totalScore / Math.max(qParts.length, tParts.length);
+}
+
+function levenshteinSimilarity(a: string, b: string): number {
+  if (a === b) return 1;
+  const maxLen = Math.max(a.length, b.length);
+  if (maxLen === 0) return 1;
+
+  const matrix: number[][] = [];
+  for (let i = 0; i <= a.length; i++) {
+    matrix[i] = [i];
+  }
+  for (let j = 0; j <= b.length; j++) {
+    matrix[0][j] = j;
+  }
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1,
+        matrix[i][j - 1] + 1,
+        matrix[i - 1][j - 1] + cost
+      );
+    }
+  }
+
+  return 1 - matrix[a.length][b.length] / maxLen;
+}
+
 export function PersonalStats({ allResults }: { allResults: Result[] }) {
   const [search, setSearch] = useState("");
   const [person, setPerson] = useState<PersonalResult | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+
+  const uniqueNames = useMemo(() => {
+    const nameMap = new Map<string, { firstName: string; lastName: string }>();
+    for (const r of allResults) {
+      const key = `${r.firstName} ${r.lastName}`.toLowerCase().trim();
+      if (!nameMap.has(key)) {
+        nameMap.set(key, { firstName: r.firstName, lastName: r.lastName });
+      }
+    }
+    return Array.from(nameMap.values());
+  }, [allResults]);
+
+  function findBestMatch(query: string): { firstName: string; lastName: string } | null {
+    let bestScore = 0;
+    let bestMatch: { firstName: string; lastName: string } | null = null;
+
+    for (const { firstName, lastName } of uniqueNames) {
+      const fullName = `${firstName} ${lastName}`;
+      const reverseName = `${lastName} ${firstName}`;
+      const score = Math.max(
+        fuzzyScore(query, fullName),
+        fuzzyScore(query, reverseName)
+      );
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = { firstName, lastName };
+      }
+    }
+
+    if (bestScore >= 0.5) return bestMatch;
+    return null;
+  }
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -22,7 +102,9 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
 
     setHasSearched(true);
     const normalizedSearch = search.toLowerCase().trim();
-    const personResults = allResults.filter((r) => {
+
+    // First try exact substring match
+    let personResults = allResults.filter((r) => {
       const fullName = `${r.firstName} ${r.lastName}`.toLowerCase().trim();
       const reverseName = `${r.lastName} ${r.firstName}`.toLowerCase().trim();
       return (
@@ -30,6 +112,16 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
         reverseName.includes(normalizedSearch)
       );
     });
+
+    // If no exact match, use fuzzy matching
+    if (personResults.length === 0) {
+      const match = findBestMatch(normalizedSearch);
+      if (match) {
+        personResults = allResults.filter(
+          (r) => r.firstName === match.firstName && r.lastName === match.lastName
+        );
+      }
+    }
 
     if (personResults.length === 0) {
       setPerson(null);
