@@ -82,6 +82,12 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
     for (const { firstName, lastName } of uniqueNames) {
       const fullName = `${firstName} ${lastName}`;
       const reverseName = `${lastName} ${firstName}`;
+
+      // Exact full match gets highest priority
+      if (fullName.toLowerCase() === query || reverseName.toLowerCase() === query) {
+        return { firstName, lastName };
+      }
+
       const score = Math.max(
         fuzzyScore(query, fullName),
         fuzzyScore(query, reverseName)
@@ -92,7 +98,7 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
       }
     }
 
-    if (bestScore >= 0.5) return bestMatch;
+    if (bestScore >= 0.4) return bestMatch;
     return null;
   }
 
@@ -103,25 +109,16 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
     setHasSearched(true);
     const normalizedSearch = search.toLowerCase().trim();
 
-    // First try exact substring match
-    let personResults = allResults.filter((r) => {
-      const fullName = `${r.firstName} ${r.lastName}`.toLowerCase().trim();
-      const reverseName = `${r.lastName} ${r.firstName}`.toLowerCase().trim();
-      return (
-        fullName.includes(normalizedSearch) ||
-        reverseName.includes(normalizedSearch)
-      );
-    });
-
-    // If no exact match, use fuzzy matching
-    if (personResults.length === 0) {
-      const match = findBestMatch(normalizedSearch);
-      if (match) {
-        personResults = allResults.filter(
-          (r) => r.firstName === match.firstName && r.lastName === match.lastName
-        );
-      }
+    // Find the best matching person (always resolve to one individual)
+    const match = findBestMatch(normalizedSearch);
+    if (!match) {
+      setPerson(null);
+      return;
     }
+
+    const personResults = allResults.filter(
+      (r) => r.firstName === match.firstName && r.lastName === match.lastName
+    );
 
     if (personResults.length === 0) {
       setPerson(null);
@@ -139,11 +136,8 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
       (a, b) => a.timeInSeconds - b.timeInSeconds
     );
 
-    const firstName = personResults[0].firstName;
-    const lastName = personResults[0].lastName;
-
     setPerson({
-      name: `${firstName} ${lastName}`,
+      name: `${match.firstName} ${match.lastName}`,
       timedResults,
       untimedResults,
       bestTime: sortedByTime.length > 0 ? sortedByTime[0] : null,
