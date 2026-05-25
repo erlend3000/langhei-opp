@@ -127,39 +127,39 @@ export function ResultTable({ results }: { results: Result[] }) {
       </p>
 
       {/* Table */}
-      <div className="bg-white rounded-lg border border-navy/10 overflow-hidden overflow-x-auto">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-lg border border-navy/10 overflow-hidden">
+        <table className="w-full text-xs md:text-sm">
           <thead>
             <tr className="bg-navy text-white text-left">
               <th
-                className="px-4 py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
+                className="px-2 md:px-4 py-2 md:py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
                 onClick={() => toggleSort("time")}
               >
                 Tid <SortIcon field="time" />
               </th>
               <th
-                className="px-4 py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
+                className="px-2 md:px-4 py-2 md:py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
                 onClick={() => toggleSort("name")}
               >
                 Navn <SortIcon field="name" />
               </th>
               <th
-                className="px-4 py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
+                className="px-2 md:px-4 py-2 md:py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
                 onClick={() => toggleSort("year")}
               >
                 År <SortIcon field="year" />
               </th>
               <th
-                className="px-4 py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
+                className="px-2 md:px-4 py-2 md:py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
                 onClick={() => toggleSort("class")}
               >
                 Klasse <SortIcon field="class" />
               </th>
               <th
-                className="px-4 py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
+                className="px-2 md:px-4 py-2 md:py-3 font-medium cursor-pointer hover:bg-navy-light select-none"
                 onClick={() => toggleSort("place")}
               >
-                Plass <SortIcon field="place" />
+                Pl. <SortIcon field="place" />
               </th>
             </tr>
           </thead>
@@ -169,17 +169,17 @@ export function ResultTable({ results }: { results: Result[] }) {
                 key={`${r.firstName}-${r.lastName}-${r.year}-${i}`}
                 className={`${i % 2 === 0 ? "bg-[#fbf9f7]" : "bg-white"} hover:bg-[#f8f5f0] transition-colors`}
               >
-                <td className="px-4 py-2 font-display text-lg">{r.time}</td>
-                <td className="px-4 py-2">
+                <td className="px-2 md:px-4 py-1.5 md:py-2 font-display text-base md:text-lg">{r.time}</td>
+                <td className="px-2 md:px-4 py-1.5 md:py-2">
                   {r.firstName} {r.lastName}
                 </td>
-                <td className="px-4 py-2">{r.year}</td>
-                <td className="px-4 py-2">
-                  <span className="inline-block px-2 py-0.5 rounded text-xs bg-navy/10">
+                <td className="px-2 md:px-4 py-1.5 md:py-2">{r.year}</td>
+                <td className="px-2 md:px-4 py-1.5 md:py-2">
+                  <span className="inline-block px-1.5 md:px-2 py-0.5 rounded text-xs bg-navy/10">
                     {r.class}
                   </span>
                 </td>
-                <td className="px-4 py-2">{r.place || "–"}</td>
+                <td className="px-2 md:px-4 py-1.5 md:py-2">{r.place || "–"}</td>
               </tr>
             ))}
           </tbody>
