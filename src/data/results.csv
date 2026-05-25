@@ -11,7 +11,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 09:11,Sortland,Sigurd,2024,Mann,2,78
 09:12,Just,Thomas,2025,Mann,1,68
 09:13,Ulevåg,Kåre,2014,Mann,1,49
-09:20,Årstad,Trond,2014,Mann,2,16
+09:20,Aarstad,Trond,2014,Mann,2,16
 09:29,Solfjeld,Erik,2016,Mann,2,
 09:29,Solfjeld,Erik,2015,Mann,4,
 09:30,Philipp,Lucia,2017,Dame,1,
@@ -123,7 +123,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 11:01,Noem,Robert,2015,Mann,16,
 11:03,Lindberg,Marius,2025,Mann,11,65
 11:03,Scheen,Ragnar,2013,Mann,11,108
-11:04,Marcussen,Mads Tore,2013,Mann,12,63
+11:04,Marcussen,Mads-Tore,2013,Mann,12,63
 11:05,Syrdal Tronstad,Regine,2025,Dame,1,63
 11:07,Sandnes,Mads Henrik,2024,Mann,14,85
 11:08,Ramsvik,Joel,2018,Gutt,4,
@@ -152,7 +152,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 11:29,Sjursen,Morten,2016,Mann,14,
 11:30,Stiansen,Dennis,2017,Gutt,3,
 11:30,Quale,Magnus,2015,Mann,19,
-11:33,Bugge,William,2024,Gutt,1,79
+11:33,Lindvik Bugge,William,2024,Gutt,1,79
 11:35,Kristoffersen,Georg,2018,Mann,11,
 11:40,Lofthus,Johan,2016,Mann,15,
 11:40,Sjaavaag,Tom,2025,Mann,14,73
@@ -200,7 +200,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 12:10,Christensen,Nils O.,2022,Mann,13,2
 12:10,Baardson,Per Atle,2013,Mann,15,65
 12:11,Oftebro,Inge Chr.,2015,Mann,22,
-12:11,Marcussen,Mads Tore,2025,Mann,20,51
+12:11,Marcussen,Mads-Tore,2025,Mann,20,51
 12:11,Sjursen,Morten,2014,Mann,17,21
 12:12,Sjursen,Mikkel,2014,Gutt,2,20
 12:13,Torp,Jon Olav,2018,Mann,14,
@@ -222,7 +222,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 12:22,Torp,Jon Olav,2024,Mann,21,64
 12:23,Isaksen,Aksel,2019,Gutt,4,
 12:25,Lindberg,Linus,2022,Gutt,4,35
-12:26,Solfjeld,Simen,2014,Gutt,3,40
+12:26,Kulland Solfjeld,Simen,2014,Gutt,3,40
 12:28,Ertzeid,Oda,2016,Jente,1,
 12:28,Olimstad,Stian,2022,Mann,15,44
 12:29,Hagane,Jørn,2014,Mann,21,19
@@ -249,7 +249,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 12:44,Evensberget,Åsta Marte,2017,Dame,2,
 12:45,Ellefsen,Simon,2025,Mann,21,64
 12:45,Haagensli,Torill,2014,Dame,3,17
-12:46,Bugge,William,2022,Gutt,5,41
+12:46,Lindvik Bugge,William,2022,Gutt,5,41
 12:47,Isaksen,Gøran,2017,Mann,22,
 12:47,Isaksen,Sigrid ,2022,Jente,1,34
 12:48,Isaksen,Gøran,2014,Mann,24,48
@@ -262,7 +262,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 12:56,Lofthus,Johan,2015,Mann,27,
 12:58,Lindberg,Mikael,2019,Mann,10,
 12:59,Lindberg,Mikael,2022,Mann,19,3
-13:00,Marcussen,Lars ,2013,Mann,18,73
+13:00,Ulevåg Marcussen,Lars,2013,Mann,18,73
 13:00,Røsås,Ola,2013,Mann,19,81
 13:03,Hoel,Ben Emil,2015,Gutt,7,
 13:03,Trondsen,Stig,2015,Mann,28,
@@ -275,7 +275,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 13:11,Bomann Halvorsen,Oliver,2018,Gutt,8,
 13:11,Haagensli,Torill,2015,Dame,4,
 13:13,Boquist Johansen,Lisa Maria,2014,Dame,5,60
-13:13,Johansen,Sondre Emil,2016,Gutt,6,
+13:13,Dale Johansen,Sondre Emil,2016,Gutt,6,
 13:14,Marcussen,Gro Anette,2014,Dame,6,14
 13:15,Pettersen,Ane,2025,Dame,6,55
 13:17,Lindberg,Mikael,2024,Mann,23,54
@@ -286,7 +286,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 13:23,Haagensli,Torill,2016,Dame,3,
 13:24,Torp,Jon Olav,2025,Mann,22,67
 13:25,Lindberg,Mikael,2016,Mann,19,
-13:25,Evensberget,Åsta,2022,Dame,2,14
+13:25,Evensberget,Åsta Marte,2022,Dame,2,14
 13:26,Ånestad,Fredrik ,2016,Gutt,7,
 13:27,Marcussen,Gro Anette,2015,Dame,6,
 13:27,Koppland,Lars,2017,Mann,23,
@@ -306,7 +306,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 13:37,Lindberg,Mikael,2017,Mann,24,
 13:42,Simensen,Alf,2014,Mann,25,55
 13:42,Isaksen,Oskar,2017,Gutt,7,
-13:45,Solfjeld,Simen,2013,Gutt,2,48
+13:45,Kulland Solfjeld,Simen,2013,Gutt,2,48
 13:46,Solfjeld,Georg,2017,Mann,25,
 13:47,Sandberg,Martin,2015,Gutt,8,
 13:47,Yri Åberg,Sondre,2015,Gutt,9,
@@ -318,7 +318,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 14:00,Ulevåg Marcussen,Anne,2013,Dame,3,103
 14:01,Os,Edvard,2018,Mann,21,
 14:01,Borgersen,Marius,2016,Mann,21,
-14:06,Marcussen,Lars,2025,Mann,23,42
+14:06,Ulevåg Marcussen,Lars,2025,Mann,23,42
 14:07,Marcussen,Gro Anette,2013,Dame,4,109
 14:07,Friis,Helene,2024,Dame,4,21
 14:07,Eriksen,Kaia,2018,Dame,2,
@@ -376,7 +376,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 15:37,Ulevåg Marcussen,Anne,2025,Dame,7,62
 15:38,Salmi Austvik,Anna Elise,2015,Jente,2,
 15:38,Jensen,Grete,2017,Dame,6,
-15:40,Johansen,Sondre,2015,Gutt,12,
+15:40,Dale Johansen,Sondre Emil,2015,Gutt,12,
 15:41,Nermo,Elise ,2014,Dame,11,70
 15:42,Nilsen,Anders ,2016,Gutt,10,
 15:43,Davik,Katrine,2015,Dame,12,
@@ -398,7 +398,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 16:08,Lomm,Kjetil,2017,Mann,29,
 16:08,Lomm,Tuva,2017,Jente,2,
 16:12,Hansen,Thomas,2014,Gutt,11,6
-16:13,Elllefsen,Simon,2019,Gutt,6,
+16:13,Ellefsen,Simon,2019,Gutt,6,
 16:14,Pettersen,Ane,2022,Dame,4,28
 16:14,Marcussen,Gro Anette,2017,Dame,7,
 16:15,Christiansen,Jens ,2019,Gutt,7,
@@ -416,10 +416,10 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 16:30,Hansen,Thomas,2015,Gutt,13,
 16:31,Auglend Pedersen,Michelle ,2016,Jente,2,
 16:31,Røsås,Åse,2013,Dame,8,83
-16:39,Kjørholt,Kristin,2015,Dame,13,
+16:39,Lamvik Kjørholt,Kristin,2015,Dame,13,
 16:39,Ulevåg,Ole Tom,2015,Mann,34,
 16:40,Sørdal,Eivind,2018,Mann,23,
-16:40,Nilsen,Roger,2015,Mann,35,
+16:40,Løvdal Nilsen,Roger,2015,Mann,35,
 16:41,Scheen,Ingrid,2016,Dame,5,
 16:41,Boquist Johansen,Lisa Maria ,2019,Dame,7,
 16:44,Auglend Pedersen,Michelle,2015,Jente,3,
@@ -445,7 +445,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 17:54,Wingerei,Sindre,2014,Mann,30,71
 17:55,Storebø,Julie,2014,Dame,17,82
 17:55,Marcussen,Terese,2013,Dame,9,87
-18:02,Johansen,Håvard,2013,Gutt,11,27
+18:02,Dale Johansen,Håvard Tobias,2013,Gutt,11,27
 18:11,Christiansen,Jens,2014,Gutt,13,81
 18:12,Christiansen,Nina,2014,Dame,18,80
 18:15,Aleksandersen,Marthe,2014,Dame,19,51
@@ -469,15 +469,15 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 19:46,Fürst Ellefsen,Elise,2024,Jente,4,43
 19:54,Marcussen,Ragnhild ,2013,Dame,14,59
 19:55,Woldseth,Geir,2022,Mann,23,36
-19:56,Solfjeld,Lea,2014,Jente,2,39
+19:56,Kulland Solfjeld,Lea,2014,Jente,2,39
 20:13,Nilsen,Eivind,2014,Gutt,14,85
 20:14,Feltstykket,Bjørn Gunnar,2014,Mann,33,42
 20:14,Gangdal,Henrik,2013,Gutt,12,42
 20:14,Dale Johansen,Sondre Emil,2014,Gutt,15,73
-20:17,Nilsen,Roger,2014,Mann,34,86
+20:17,Løvdal Nilsen,Roger,2014,Mann,34,86
 20:25,Hansen,Silje,2014,Jente,3,7
 20:49,Johansen,Erlend ,2013,Mann,27,106
-20:54,Johansen,Sondre Emil,2013,Gutt,13,28
+20:54,Dale Johansen,Sondre Emil,2013,Gutt,13,28
 21:10,Marcussen,Truls,2014,Gutt,16,23
 21:15,Jensen,Oline,2014,Jente,4,90
 21:17,Taraldsen,Jenny,2014,Jente,5,98
@@ -488,13 +488,13 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 21:41,Isaksen,Sigrid,2014,Jente,6,44
 21:44,Ertzeid,Stig ,2013,Mann,28,70
 21:51,Stocker,Unni ,2014,Dame,21,89
-21:55,Solfjeld,Lea K.,2013,Jente,5,49
+21:55,Kulland Solfjeld,Lea,2013,Jente,5,49
 22:08,Breen,Merete,2017,Jente,3,
 22:10,Lindberg,Linus,2014,Gutt,18,11
 22:10,Isaksen,Marita,2014,Dame,22,47
 22:13,Blomberg,Patrick,2015,Mann,37,
 22:20,Heldal,Maren,2014,Dame,23,94
-22:21,Falck,Cecilie,2025,Jente,1,3
+22:21,Fürst Falck,Cecilie,2025,Jente,1,3
 22:21,Fürst Ellefsen,Elise,2025,Jente,1,2
 22:41,Ramsvik,Elias ,2015,Gutt,16,
 22:49,Marcussen,Herman,2017,Gutt,9,
@@ -519,7 +519,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 30:38,Ellefsen,Henning,2014,Gutt,22,59
 30:56,Ellefsen,Frode,2014,Mann,36,57
 31:34,Marcussen,Jan,2013,Mann,29,110
-31:34,Marcussen,Magnus,2013,Gutt,15,29
+31:34,Ulevåg Marcussen,Magnus,2013,Gutt,15,29
 33:24,Myrvang,Phillip,2022,Gutt,9,11
 33:24,Igland,Sarah,2022,Dame,7,10
 33:24,Igland,Tallak,2022,Gutt,9,12

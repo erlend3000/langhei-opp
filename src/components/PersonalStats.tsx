@@ -5,9 +5,10 @@ import type { Result } from "@/lib/data";
 
 interface PersonalResult {
   name: string;
-  results: Result[];
-  bestTime: Result;
-  totalRaces: number;
+  timedResults: Result[];
+  untimedResults: Result[];
+  bestTime: Result | null;
+  totalParticipations: number;
 }
 
 export function PersonalStats({ allResults }: { allResults: Result[] }) {
@@ -35,15 +36,26 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
       return;
     }
 
-    const sorted = [...personResults].sort(
+    const timedResults = personResults
+      .filter((r) => r.timed)
+      .sort((a, b) => a.year - b.year);
+    const untimedResults = personResults
+      .filter((r) => !r.timed)
+      .sort((a, b) => a.year - b.year);
+
+    const sortedByTime = [...timedResults].sort(
       (a, b) => a.timeInSeconds - b.timeInSeconds
     );
 
+    const firstName = personResults[0].firstName;
+    const lastName = personResults[0].lastName;
+
     setPerson({
-      name: `${sorted[0].firstName} ${sorted[0].lastName}`,
-      results: personResults.sort((a, b) => a.year - b.year),
-      bestTime: sorted[0],
-      totalRaces: personResults.length,
+      name: `${firstName} ${lastName}`,
+      timedResults,
+      untimedResults,
+      bestTime: sortedByTime.length > 0 ? sortedByTime[0] : null,
+      totalParticipations: personResults.length,
     });
   }
 
@@ -74,51 +86,99 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
 
       {person && (
         <div className="space-y-4">
-          <div className="flex items-center gap-4 pb-3 border-b border-navy/10">
-            <div>
-              <h4 className="font-display text-xl text-navy">{person.name}</h4>
-              <p className="text-sm text-navy/60">
-                {person.totalRaces} {person.totalRaces === 1 ? "løp" : "løp"} registrert
-              </p>
-            </div>
-            <div className="ml-auto text-right">
-              <p className="text-xs text-navy/60">Personlig rekord</p>
-              <p className="font-display text-3xl text-red">
-                {person.bestTime.time}
-              </p>
-              <p className="text-xs text-navy/60">{person.bestTime.year}</p>
-            </div>
-          </div>
-
-          {/* Progress chart */}
-          <div>
-            <h5 className="text-sm font-medium text-navy/70 mb-2">
-              Utvikling over tid
-            </h5>
-            <TimeChart results={person.results} />
-          </div>
-
-          {/* Results list */}
-          <div className="space-y-1">
-            {person.results.map((r, i) => (
-              <div
-                key={i}
-                className={`flex items-center px-3 py-2 rounded text-sm ${
-                  r.timeInSeconds === person.bestTime.timeInSeconds
-                    ? "bg-red/10 border border-red/20"
-                    : "bg-cream-light/50"
-                }`}
-              >
-                <span className="font-display text-lg w-14">{r.time}</span>
-                <span className="text-navy/60 w-12">{r.year}</span>
-                <span className="text-navy/60 w-16">{r.class}</span>
-                <span className="text-navy/60">Plass: {r.place || "–"}</span>
-                {r.timeInSeconds === person.bestTime.timeInSeconds && (
-                  <span className="ml-auto text-xs text-red font-medium">PR</span>
+          {person.timedResults.length > 0 ? (
+            <>
+              <div className="flex items-center gap-4 pb-3 border-b border-navy/10">
+                <div>
+                  <h4 className="font-display text-xl text-navy">{person.name}</h4>
+                  <p className="text-sm text-navy/60">
+                    {person.totalParticipations} {person.totalParticipations === 1 ? "deltakelse" : "deltakelser"} registrert
+                  </p>
+                </div>
+                {person.bestTime && (
+                  <div className="ml-auto text-right">
+                    <p className="text-xs text-navy/60">Personlig rekord</p>
+                    <p className="font-display text-3xl text-red">
+                      {person.bestTime.time}
+                    </p>
+                    <p className="text-xs text-navy/60">{person.bestTime.year}</p>
+                  </div>
                 )}
               </div>
-            ))}
-          </div>
+
+              {/* Progress chart – only timed results */}
+              {person.timedResults.length >= 2 && (
+                <div>
+                  <h5 className="text-sm font-medium text-navy/70 mb-2">
+                    Utvikling over tid
+                  </h5>
+                  <TimeChart results={person.timedResults} />
+                </div>
+              )}
+
+              {/* Timed results list */}
+              <div className="space-y-1">
+                {person.timedResults.map((r, i) => (
+                  <div
+                    key={i}
+                    className={`flex items-center px-3 py-2 rounded text-sm ${
+                      person.bestTime && r.timeInSeconds === person.bestTime.timeInSeconds
+                        ? "bg-red/10 border border-red/20"
+                        : "bg-[#fbf9f7]"
+                    }`}
+                  >
+                    <span className="font-display text-lg w-14">{r.time}</span>
+                    <span className="text-navy/60 w-12">{r.year}</span>
+                    <span className="text-navy/60 w-16">{r.class}</span>
+                    <span className="text-navy/60">Plass: {r.place || "–"}</span>
+                    {person.bestTime && r.timeInSeconds === person.bestTime.timeInSeconds && (
+                      <span className="ml-auto text-xs text-red font-medium">PR</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Untimed participations (trim/barn) – when also has timed */}
+              {person.untimedResults.length > 0 && (
+                <div className="pt-2 border-t border-navy/10">
+                  <p className="text-sm text-navy/60 mb-2">
+                    Deltok også uten tidtaking:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {person.untimedResults.map((r, i) => (
+                      <span
+                        key={i}
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[#f8f5f0] text-xs text-navy/70"
+                      >
+                        {r.year}
+                        <span className="text-navy/40">({r.class})</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <div>
+                <h4 className="font-display text-xl text-navy">{person.name}</h4>
+                <p className="text-sm text-navy/60 mt-1">
+                  {person.untimedResults.length} {person.untimedResults.length === 1 ? "deltakelse" : "deltakelser"} registrert uten tidtaking:
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {person.untimedResults.map((r, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[#f8f5f0] text-xs text-navy/70"
+                  >
+                    {r.year}
+                    <span className="text-navy/40">({r.class})</span>
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
 

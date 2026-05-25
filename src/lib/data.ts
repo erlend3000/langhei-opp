@@ -27,6 +27,7 @@ export interface Result {
   class: string;
   place: number;
   bibNumber: number | null;
+  timed: boolean;
 }
 
 export interface PersonalStats {
@@ -142,6 +143,7 @@ export function parseCSV(): Result[] {
       class: parts[4].trim(),
       place: parseInt(parts[5].trim()) || 0,
       bibNumber: parts[6] ? parseInt(parts[6].trim()) || null : null,
+      timed: true,
     };
 
     if (result.timeInSeconds > 0 && result.year > 0) {
@@ -152,23 +154,72 @@ export function parseCSV(): Result[] {
   return results;
 }
 
+export function parseTrimBarnCSV(): Result[] {
+  const csvPath = path.join(process.cwd(), "src/data/trim_barn.csv");
+  if (!fs.existsSync(csvPath)) return [];
+  const content = fs.readFileSync(csvPath, "utf-8");
+  const lines = content.split("\n");
+
+  const results: Result[] = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    const parts = line.split(",");
+    if (parts.length < 5) continue;
+
+    const lastName = parts[1].trim();
+    const firstName = parts[2].trim();
+    const year = parseInt(parts[3].trim());
+    const cls = parts[4].trim();
+
+    if (!lastName && !firstName) continue;
+    if (!year) continue;
+
+    results.push({
+      time: "",
+      timeInSeconds: 0,
+      lastName,
+      firstName,
+      year,
+      class: cls,
+      place: 0,
+      bibNumber: null,
+      timed: false,
+    });
+  }
+
+  return results;
+}
+
+export function parseAllResults(): { timed: Result[]; untimed: Result[]; all: Result[] } {
+  const timed = parseCSV();
+  const untimed = parseTrimBarnCSV();
+  return { timed, untimed, all: [...timed, ...untimed] };
+}
+
 export function getFullName(result: Result): string {
   return `${result.firstName} ${result.lastName}`;
 }
 
-export function computeStats(results: Result[]): AllStats {
-  const sortedByTime = [...results].sort(
+export function computeStats(timedResults: Result[], allResults?: Result[]): AllStats {
+  const all = allResults || timedResults;
+
+  const sortedByTime = [...timedResults].sort(
     (a, b) => a.timeInSeconds - b.timeInSeconds
   );
 
+  // Unique runners counts everyone (incl. trim/barn)
   const uniqueRunners = new Set(
-    results.map((r) => `${r.firstName.trim()} ${r.lastName.trim()}`)
+    all.map((r) => `${r.firstName.trim()} ${r.lastName.trim()}`)
   );
 
-  const years = [...new Set(results.map((r) => r.year))].sort();
+  const years = [...new Set(all.map((r) => r.year))].sort();
 
-  const classes = [...new Set(results.map((r) => r.class))];
-  const classRecords: ClassRecord[] = classes.map((cls) => {
+  // Class records and top lists only from timed results
+  const timedClasses = [...new Set(timedResults.map((r) => r.class))];
+  const classRecords: ClassRecord[] = timedClasses.map((cls) => {
     const classResults = sortedByTime.filter((r) => r.class === cls);
     return { class: cls, record: classResults[0] };
   });
@@ -176,14 +227,15 @@ export function computeStats(results: Result[]): AllStats {
   const topTenAllTime = sortedByTime.slice(0, 10);
 
   const topTenByClass: Record<string, Result[]> = {};
-  for (const cls of classes) {
+  for (const cls of timedClasses) {
     topTenByClass[cls] = sortedByTime
       .filter((r) => r.class === cls)
       .slice(0, 10);
   }
 
+  // Year stats includes all participants
   const yearStats: YearStats[] = years.map((year) => {
-    const yearResults = results.filter((r) => r.year === year);
+    const yearResults = all.filter((r) => r.year === year);
     return {
       year,
       totalParticipants: yearResults.length,
@@ -191,12 +243,12 @@ export function computeStats(results: Result[]): AllStats {
     };
   });
 
-  const funFacts = computeFunFacts(results);
-  const courseStats = computeCourseStats(results, sortedByTime, years, classRecords);
+  const funFacts = computeFunFacts(timedResults, all);
+  const courseStats = computeCourseStats(timedResults, sortedByTime, years, classRecords, all);
 
   return {
     results: sortedByTime,
-    totalResults: results.length,
+    totalResults: timedResults.length,
     totalUniqueRunners: uniqueRunners.size,
     yearsArranged: years,
     classRecords,
@@ -212,7 +264,8 @@ function computeCourseStats(
   results: Result[],
   sortedByTime: Result[],
   years: number[],
-  classRecords: ClassRecord[]
+  classRecords: ClassRecord[],
+  allResults?: Result[]
 ): CourseStats {
   const times = results.map((r) => r.timeInSeconds);
   const totalTime = times.reduce((sum, t) => sum + t, 0);
@@ -262,9 +315,10 @@ function computeCourseStats(
       )
     : 0;
 
-  // Runners who have completed most unique editions
+  // Runners who have completed most unique editions (counting ALL participations)
+  const editionsSource = allResults || results;
   const personEditions: Record<string, Set<number>> = {};
-  for (const r of results) {
+  for (const r of editionsSource) {
     const name = `${r.firstName.trim()} ${r.lastName.trim()}`;
     if (!personEditions[name]) personEditions[name] = new Set();
     personEditions[name].add(r.year);
@@ -292,9 +346,11 @@ function computeCourseStats(
   };
 }
 
-function computeFunFacts(results: Result[]): FunFacts {
+function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
+  const all = allResults || results;
+  // Most participations counts ALL (including trim/barn)
   const participationCount: Record<string, number> = {};
-  for (const r of results) {
+  for (const r of all) {
     const name = `${r.firstName.trim()} ${r.lastName.trim()}`;
     participationCount[name] = (participationCount[name] || 0) + 1;
   }
@@ -444,7 +500,7 @@ function computeFunFacts(results: Result[]): FunFacts {
     biggestImprovement,
     oldestEdition: years[0],
     newestEdition: years[years.length - 1],
-    totalParticipantsAllTime: results.length,
+    totalParticipantsAllTime: all.length,
     totalKmRun,
     totalElevationGain,
     everestMultiple,

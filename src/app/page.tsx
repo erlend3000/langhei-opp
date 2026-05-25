@@ -1,4 +1,4 @@
-import { parseCSV, computeStats, getFullName, COURSE } from "@/lib/data";
+import { parseAllResults, computeStats, getFullName, COURSE } from "@/lib/data";
 import { ResultTable } from "@/components/ResultTable";
 import { PersonalStats } from "@/components/PersonalStats";
 import { CourseProfile } from "@/components/CourseProfile";
@@ -6,8 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
-  const results = parseCSV();
-  const stats = computeStats(results);
+  const { timed, all } = parseAllResults();
+  const stats = computeStats(timed, all);
 
   const mainClasses = ["Mann", "Dame", "Gutt", "Jente"];
 
@@ -36,7 +36,7 @@ export default function Home() {
               </h2>
               <div className="grid grid-cols-3 gap-3">
                 <StatBox value={stats.totalResults.toString()} label="Registrerte tider" />
-                <StatBox value={stats.totalUniqueRunners.toString()} label="Unike løpere" />
+                <StatBox value={stats.totalUniqueRunners.toString()} label="Forskjellige løpere" />
                 <StatBox value={stats.yearsArranged.length.toString()} label="År arrangert" />
                 <StatBox value={`${COURSE.length} m`} label="Løypelengde" />
                 <StatBox value={`${COURSE.grossElevationGain} m`} label="Brutto stigning" />
@@ -57,7 +57,7 @@ export default function Home() {
               <CourseStatCard value={`${COURSE.netElevationGain} m`} label="Netto stigning" />
               <CourseStatCard value={`${COURSE.grossElevationGain} m`} label="Brutto stigning" />
               <CourseStatCard value={`${COURSE.totalDescent} m`} label="Totalt fall" />
-              <CourseStatCard value={`${COURSE.averageGradient.toFixed(1)}%`} label="Snitt helning" />
+              <CourseStatCard value={`${COURSE.averageGradient.toFixed(1)}%`} label="Snitt stigning" />
               <CourseStatCard value={`${Math.round(COURSE.elevationPerKmGross)} m/km`} label="Høydemeter/km" />
             </div>
             <div className="relative h-[240px] md:h-auto">
@@ -106,18 +106,23 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <CourseStatCard value={stats.courseStats.averageTime} label="Gjennomsnittstid" />
             <CourseStatCard value={stats.courseStats.medianTime} label="Mediantid" />
-            <CourseStatCard value={stats.courseStats.under10min.toString()} label="Ganger under 10 min" />
-            <CourseStatCard value={stats.courseStats.under15min.toString()} label="Ganger under 15 min" />
+            <CourseStatCard value={stats.courseStats.under10min.toString()} label="Løp under 10 min" />
+            <CourseStatCard value={stats.courseStats.under15min.toString()} label="Løp under 15 min" />
             <CourseStatCard value={`${stats.courseStats.recordVerticalSpeed} m/t`} label="Vertikal fart (rekord menn)" />
             <CourseStatCard value={`${stats.courseStats.recordVerticalSpeedWomen} m/t`} label="Vertikal fart (rekord kvinner)" />
             <CourseStatCard value={`${stats.courseStats.largestField.count} (${stats.courseStats.largestField.year})`} label="Største felt" />
             <CourseStatCard value={`${stats.courseStats.genderPercentage.menPct}% / ${stats.courseStats.genderPercentage.womenPct}%`} label="Menn / Kvinner" />
           </div>
 
+          <p className="text-xs text-navy/50 mt-4">
+            Barneklasse 2013–2019 og trimklasse fra 2015 – uten tidtaking.
+            Disse er inkludert i deltakertall og trofaste løpere.
+          </p>
+
           {/* Most editions */}
           <h3 className="font-display text-xl text-navy mt-6 mb-2">TROFASTE LØPERE</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-            {stats.courseStats.allEditionsRunners.slice(0, 6).map((r, i) => (
+            {stats.courseStats.allEditionsRunners.slice(0, 9).map((r, i) => (
               <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#f8f5f0]">
                 <span className="font-display text-lg leading-none text-red translate-y-[1px]">{i + 1}</span>
                 <span className="text-sm leading-none flex-1">{r.name}</span>
@@ -132,7 +137,7 @@ export default function Home() {
           <h2 className="font-display text-3xl text-navy border-b-2 border-red pb-1 mb-4">
             FINN DINE RESULTATER
           </h2>
-          <PersonalStats allResults={results} />
+          <PersonalStats allResults={all} />
         </section>
 
         {/* Full results table */}
@@ -140,7 +145,7 @@ export default function Home() {
           <h2 className="font-display text-3xl text-navy border-b-2 border-red pb-1 mb-4">
             ALLE RESULTATER
           </h2>
-          <ResultTable results={results} />
+          <ResultTable results={timed} />
         </section>
 
         {/* Print link */}
