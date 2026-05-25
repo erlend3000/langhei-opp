@@ -37,5 +37,22 @@ body {
   .print-poster {
     width: 594mm !important;
     height: 420mm !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+
+  .print-poster-zoom {
+    transform: none !important;
+    padding: 0 !important;
+    width: auto !important;
+  }
+
+  .print-poster [style*="outline"],
+  .print-poster .outline {
+    outline: none !important;
+  }
+
+  * {
+    outline: none !important;
   }
 }

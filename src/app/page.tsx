@@ -20,7 +20,7 @@ export default function Home() {
             {/* Logo */}
             <div className="relative z-0">
               <Image
-                src="/images/Logo_langhei_opp.png"
+                src="/images/Logo_langhei_opp_web.png"
                 alt="Langhei Opp"
                 width={800}
                 height={800}
