@@ -115,8 +115,8 @@ export default function Home() {
 
           <p className="text-xs text-navy/50 mt-4">
             Merk: Deltakere i barneklasse (2013–2019) og trimklasse (fra 2015)
-            løper uten tidtaking. De telles likevel med i statistikken, men
-            registreringen av trimmere før 2024 er mangelfull.
+            løper uten tidtaking. De telles likevel med i statistikken.
+            Registreringen av trimmere før 2024 er mangelfull.
           </p>
 
           {/* Most editions */}
