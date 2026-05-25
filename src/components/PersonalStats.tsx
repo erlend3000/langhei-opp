@@ -196,8 +196,8 @@ export function PersonalStats({ allResults }: { allResults: Result[] }) {
                 </div>
                 {person.bestTime && (
                   <div className="ml-auto text-right">
-                    <p className="text-xs text-navy/60">Personlig rekord</p>
-                    <p className="font-display text-3xl text-red">
+                    <p className="text-xs text-navy/60 mb-1">Personlig rekord</p>
+                    <p className="font-display text-3xl text-red leading-none mb-1">
                       {person.bestTime.time}
                     </p>
                     <p className="text-xs text-navy/60">{person.bestTime.year}</p>
