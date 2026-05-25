@@ -121,7 +121,7 @@ export default function Home() {
 
           {/* Most editions */}
           <h3 className="font-display text-xl text-navy mt-6 mb-2">TROFASTE LØPERE</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-flow-col grid-rows-[repeat(9,1fr)] sm:grid-rows-[repeat(5,1fr)] md:grid-rows-[repeat(3,1fr)] gap-2">
             {stats.courseStats.allEditionsRunners.slice(0, 9).map((r, i) => (
               <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#f8f5f0]">
                 <span className="font-display text-lg leading-none text-red translate-y-[1px]">{i + 1}</span>

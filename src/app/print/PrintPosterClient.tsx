@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { CourseProfile } from "@/components/CourseProfile";
 import {
@@ -38,6 +39,48 @@ function autoFitGrid(minWidthMm: number) {
     gridTemplateColumns: `repeat(auto-fit, minmax(${minWidthMm}mm, 1fr))`,
     gridAutoRows: "1fr" as const,
   };
+}
+
+function TrofasteGrid({
+  minWidth,
+  count,
+  children,
+}: {
+  minWidth: number;
+  count: number;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [cols, setCols] = useState(1);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const el = ref.current;
+    const update = () => {
+      const widthMm = el.clientWidth * (25.4 / 96);
+      const c = Math.max(1, Math.floor(widthMm / minWidth));
+      setCols(c);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [minWidth]);
+
+  const rows = Math.ceil(count / cols);
+
+  return (
+    <div
+      ref={ref}
+      className="grid grid-flow-col gap-[6px] mt-[10px] flex-1 min-h-0"
+      style={{
+        gridTemplateRows: `repeat(${rows}, 1fr)`,
+        gridAutoColumns: `minmax(${minWidth}mm, 1fr)`,
+      }}
+    >
+      {children}
+    </div>
+  );
 }
 
 const sectionTitleStyle = { fontSize: "var(--ft-section-title)" };
@@ -267,10 +310,7 @@ function PosterContent({
       <DraggableBox id="trofaste">
         <section className="w-full h-full flex flex-col">
           <SectionTitle>Trofaste løpere</SectionTitle>
-          <div
-            className="grid gap-[6px] mt-[10px] flex-1 min-h-0"
-            style={autoFitGrid(options.trofasteMinWidth)}
-          >
+          <TrofasteGrid minWidth={options.trofasteMinWidth} count={options.trofasteCount}>
             {stats.courseStats.allEditionsRunners
               .slice(0, options.trofasteCount)
               .map((r, i) => (
@@ -295,7 +335,7 @@ function PosterContent({
                   </span>
                 </div>
               ))}
-          </div>
+          </TrofasteGrid>
         </section>
       </DraggableBox>
 
