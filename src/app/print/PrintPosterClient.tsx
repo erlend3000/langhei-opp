@@ -321,15 +321,15 @@ function PosterContent({
                   data-snap
                 >
                   <span
-                    className="font-display text-red w-[24px] shrink-0"
-                    style={{ fontSize: "calc(var(--ft-trofaste-row) * 1.2)" }}
+                    className="font-display text-red w-[24px] shrink-0 translate-y-[0.08em]"
+                    style={{ fontSize: "calc(var(--ft-trofaste-row) * 1.2)", lineHeight: "1" }}
                   >
                     {i + 1}
                   </span>
-                  <span className="flex-1 truncate">{r.name}</span>
+                  <span className="flex-1 truncate translate-y-[0.02em]" style={{ lineHeight: "1.3" }}>{r.name}</span>
                   <span
-                    className="font-display text-navy ml-[8px] shrink-0"
-                    style={{ fontSize: "calc(var(--ft-trofaste-row) * 1.2)" }}
+                    className="font-display text-navy ml-[8px] shrink-0 translate-y-[0.08em]"
+                    style={{ fontSize: "calc(var(--ft-trofaste-row) * 1.2)", lineHeight: "1" }}
                   >
                     {r.editions} år
                   </span>
