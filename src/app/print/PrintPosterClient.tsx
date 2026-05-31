@@ -411,7 +411,7 @@ function PosterContent({
               className="font-display text-navy uppercase leading-tight tracking-wide"
               style={colophonTitleStyle}
             >
-              Langhei Opp {stats.yearsArranged.length} år · Gjeving IL 100 år
+              Langhei Opp {stats.langheiOppAge} år · Gjeving IL {stats.gjevingILAge} år
             </p>
             <p
               className="text-navy/70 leading-relaxed mt-[6px]"

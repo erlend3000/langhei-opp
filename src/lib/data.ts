@@ -54,6 +54,8 @@ export interface AllStats {
   totalResults: number;
   totalUniqueRunners: number;
   yearsArranged: number[];
+  langheiOppAge: number;
+  gjevingILAge: number;
   classRecords: ClassRecord[];
   topTenAllTime: Result[];
   topTenByClass: Record<string, Result[]>;
@@ -248,11 +250,19 @@ export function computeStats(timedResults: Result[], allResults?: Result[]): All
   const funFacts = computeFunFacts(timedResults, all);
   const courseStats = computeCourseStats(timedResults, sortedByTime, years, classRecords, all);
 
+  const GJEVING_IL_FOUNDED = 1926;
+  const currentYear = new Date().getFullYear();
+  const lastDataYear = years[years.length - 1];
+  const langheiOppAge = years.length + (currentYear > lastDataYear ? 1 : 0);
+  const gjevingILAge = currentYear - GJEVING_IL_FOUNDED;
+
   return {
     results: sortedByTime,
     totalResults: timedResults.length,
     totalUniqueRunners: uniqueRunners.size,
     yearsArranged: years,
+    langheiOppAge,
+    gjevingILAge,
     classRecords,
     topTenAllTime,
     topTenByClass,

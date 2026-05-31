@@ -200,7 +200,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 flex flex-col items-center md:flex-row md:items-center md:justify-center gap-5 md:gap-8">
           <div className="text-center md:text-right">
             <p className="font-display text-xl md:text-2xl text-navy uppercase tracking-wide">
-              Langhei Opp {stats.yearsArranged.length} år · Gjeving IL 100 år
+              Langhei Opp {stats.langheiOppAge} år · Gjeving IL {stats.gjevingILAge} år
             </p>
             <p className="text-navy/60 text-sm mt-1">
               Data fra {stats.yearsArranged.length} arrangerte år,{" "}
