@@ -2,21 +2,26 @@ import fs from "fs";
 import path from "path";
 
 /**
- * Returns the year of the next Langhei Opp race.
- * The race is held the first Saturday in June.
- * After 12:00 on race day, flips to next year.
+ * Returns the date of the next Langhei Opp race (first Saturday in June).
+ * After 12:00 on race day, returns next year's date.
  */
-export function getNextRaceYear(): number {
+export function getNextRaceDate(): { day: number; year: number } {
   const now = new Date();
   const year = now.getFullYear();
 
-  // Find first Saturday in June for current year
-  const june1 = new Date(year, 5, 1); // June is month 5
-  const dayOfWeek = june1.getDay(); // 0=Sun, 6=Sat
-  const firstSaturday = new Date(year, 5, 1 + ((6 - dayOfWeek + 7) % 7));
-  firstSaturday.setHours(12, 0, 0, 0);
+  const firstSat = findFirstSaturdayInJune(year);
+  const cutoff = new Date(year, 5, firstSat, 12, 0, 0);
 
-  return now < firstSaturday ? year : year + 1;
+  if (now < cutoff) {
+    return { day: firstSat, year };
+  }
+  return { day: findFirstSaturdayInJune(year + 1), year: year + 1 };
+}
+
+function findFirstSaturdayInJune(year: number): number {
+  const june1 = new Date(year, 5, 1);
+  const dayOfWeek = june1.getDay(); // 0=Sun, 6=Sat
+  return 1 + ((6 - dayOfWeek + 7) % 7);
 }
 
 // --- Course constants ---

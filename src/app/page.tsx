@@ -1,4 +1,4 @@
-import { parseAllResults, computeStats, getFullName, COURSE, getNextRaceYear } from "@/lib/data";
+import { parseAllResults, computeStats, getFullName, COURSE, getNextRaceDate } from "@/lib/data";
 import { ResultTable } from "@/components/ResultTable";
 import { PersonalStats } from "@/components/PersonalStats";
 import { CourseProfile } from "@/components/CourseProfile";
@@ -7,7 +7,7 @@ import Image from "next/image";
 export default function Home() {
   const { timed, all } = parseAllResults();
   const stats = computeStats(timed, all);
-  const nextRaceYear = getNextRaceYear();
+  const nextRace = getNextRaceDate();
 
   const mainClasses = ["Mann", "Dame", "Gutt", "Jente"];
 
@@ -217,8 +217,7 @@ export default function Home() {
               >
                 GIL på Facebook
               </a>
-              . Håper vi ser deg i{" "}
-              {nextRaceYear}!
+              . Håper vi ser deg lørdag {nextRace.day}. juni {nextRace.year}!
             </p>
           </div>
           <div className="relative w-28 h-28 md:w-36 md:h-36 shrink-0">
