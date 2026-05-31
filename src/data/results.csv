@@ -144,7 +144,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 11:22,Kivle,Vemund ,2022,Mann,9,27
 11:24,Ånonsen,Jostein,2018,Mann,10,
 11:24,Hegertun,Oliver,2024,Mann,17,87
-11:26,Hageli Tilma,Jon Håkon,2024,Mann,18,28
+11:26,Hageli Tilma,Jon-Håkon,2024,Mann,18,28
 11:27,Kjørholt,Halvor,2015,Mann,18,
 11:27,Sandnes,Ole Marius,2022,Mann,10,16
 11:28,Kjørholt,Jonathan,2014,Gutt,1,64
@@ -158,7 +158,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 11:40,Sjaavaag,Tom,2025,Mann,14,73
 11:41,Abrahamsen Stensvik,Aksel,2024,Gutt,2,75
 11:41,Raknes,Bjørn Olav,2017,Mann,17,
-11:42,Hageli Tilma,Jon Håkon,2025,Mann,15,49
+11:42,Hageli Tilma,Jon-Håkon,2025,Mann,15,49
 11:43,Aaser Tveit,Henrik,2025,Mann,16,58
 11:44,Reier Heen Espeland,Lars,2022,Gutt,2,40
 11:44,Taraldsen,Peder,2018,Gutt,5,
@@ -235,7 +235,7 @@ Tid,Etternavn,Fornavn,År,Klasse,Plass,Startnr.
 12:34,Torp,Jon Olav ,2022,Mann,16,45
 12:35,Sandnes,Cathrine,2016,Dame,2,
 12:35,Taraldsen,Øyvind,2015,Mann,24,
-12:36,Hageli Tilma,Jon Håkon,2022,Mann,17,19
+12:36,Hageli Tilma,Jon-Håkon,2022,Mann,17,19
 12:36,Guasco,Jonathan,2018,Mann,17,
 12:36,Ertzeid,Oda,2019,Jente,2,
 12:38,Winther,Bjørn Tore,2014,Mann,23,18
