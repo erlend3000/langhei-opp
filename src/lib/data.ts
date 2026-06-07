@@ -118,6 +118,7 @@ export interface FunFacts {
   newestEdition: number;
   totalParticipantsAllTime: number;
   totalKmRun: number;
+  totalKmComparison: string;
   totalElevationGain: number;
   everestMultiple: number;
   biggestFamily: { lastName: string; members: number; participations: number };
@@ -381,6 +382,66 @@ function computeCourseStats(
   };
 }
 
+const DISTANCE_LANDMARKS = [
+  { city: "Oslo", km: 177 },
+  { city: "Stavanger", km: 189 },
+  { city: "Bergen", km: 284 },
+  { city: "København", km: 395 },
+  { city: "Stockholm", km: 531 },
+  { city: "Trondheim", km: 542 },
+  { city: "Berlin", km: 735 },
+  { city: "Amsterdam", km: 741 },
+  { city: "Edinburgh", km: 788 },
+  { city: "Helsinki", km: 923 },
+  { city: "London", km: 979 },
+  { city: "Bodø", km: 1002 },
+  { city: "Warszawa", km: 1042 },
+  { city: "Paris", km: 1169 },
+  { city: "Wien", km: 1258 },
+  { city: "Tromsø", km: 1319 },
+  { city: "Nordkapp", km: 1500 },
+  { city: "Reykjavik", km: 1740 },
+  { city: "Moskva", km: 1750 },
+  { city: "Roma", km: 1877 },
+  { city: "Barcelona", km: 1975 },
+  { city: "Madrid", km: 2214 },
+  { city: "Istanbul", km: 2412 },
+  { city: "Athen", km: 2532 },
+  { city: "Lisboa", km: 2563 },
+  { city: "Kairo", km: 3602 },
+  { city: "Dubai", km: 5165 },
+  { city: "Dakar", km: 5345 },
+  { city: "New York", km: 5881 },
+] as const;
+
+function getDistanceComparison(km: number): string {
+  let best: { city: string; km: number; ratio: number } | null = null;
+
+  for (const landmark of DISTANCE_LANDMARKS) {
+    const ratio = km / landmark.km;
+    if (ratio < 0.8 || ratio > 2.5) continue;
+    if (!best || Math.abs(ratio - 1) < Math.abs(best.ratio - 1)) {
+      best = { ...landmark, ratio };
+    }
+  }
+
+  if (!best) return `${km} km`;
+
+  const ratio = best.ratio;
+  const dest = `Gjeving–${best.city}`;
+
+  if (ratio >= 0.95 && ratio <= 1.05) return `omtrent som ${dest}`;
+  if (ratio > 1.05 && ratio <= 1.15) return `litt mer enn ${dest}`;
+  if (ratio > 1.15 && ratio <= 1.35) return `godt over ${dest}`;
+  if (ratio > 1.35 && ratio <= 1.6) return `nesten halvannen gang ${dest}`;
+  if (ratio > 1.6 && ratio <= 2.1) return `nesten to ganger ${dest}`;
+  if (ratio > 2.1 && ratio <= 2.5) return `over dobbelt ${dest}`;
+  if (ratio >= 0.85 && ratio < 0.95) return `nesten like langt som ${dest}`;
+  if (ratio >= 0.8 && ratio < 0.85) return `ikke langt unna ${dest}`;
+
+  return `${km} km`;
+}
+
 function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
   const all = allResults || results;
   // Most participations counts ALL (including trim/barn)
@@ -445,6 +506,7 @@ function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
 
   // Total distance and elevation
   const totalKmRun = Math.round((results.length * COURSE.length) / 1000);
+  const totalKmComparison = getDistanceComparison(totalKmRun);
   const totalElevationGain = results.length * COURSE.grossElevationGain;
   const everestMultiple = parseFloat((totalElevationGain / 8849).toFixed(1));
 
@@ -550,6 +612,7 @@ function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
     newestEdition: years[years.length - 1],
     totalParticipantsAllTime: all.length,
     totalKmRun,
+    totalKmComparison,
     totalElevationGain,
     everestMultiple,
     biggestFamily: {

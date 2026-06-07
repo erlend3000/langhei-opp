@@ -157,7 +157,7 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <FunFactBox
               title="Samlet distanse"
-              text={`Alle deltakere har til sammen løpt ${stats.funFacts.totalKmRun} km. Nesten Oslo–Trondheim!`}
+              text={`Alle deltakere har til sammen løpt ${stats.funFacts.totalKmRun} km — ${stats.funFacts.totalKmComparison}!`}
             />
             <FunFactBox
               title="Høydemeter samlet"
