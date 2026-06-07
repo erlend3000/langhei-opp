@@ -444,8 +444,8 @@ function getDistanceComparison(km: number): string {
 }
 
 const ELEVATION_THINGS = [
-  { name: "Eiffeltårn", m: 330, roundOnly: [50, 100, 150, 200, 250, 500, 1000] },
-  { name: "Preikestoler", m: 604, roundOnly: [25, 50, 75, 100, 150, 200, 500] },
+  { name: "Eiffeltårnet", m: 330, roundOnly: [50, 100, 150, 200, 250, 500, 1000] },
+  { name: "Prekestolen", m: 604, roundOnly: [25, 50, 75, 100, 150, 200, 500] },
   { name: "Burj Khalifa", m: 830, roundOnly: [25, 50, 75, 100, 150, 200] },
   { name: "Galdhøpiggen", m: 2469, roundOnly: [10, 15, 20, 25, 30, 40, 50, 75, 100] },
   { name: "Kilimanjaro", m: 5895, nice: true },
