@@ -443,47 +443,49 @@ function getDistanceComparison(km: number): string {
   return `${km} km`;
 }
 
-const ELEVATION_LANDMARKS = [
-  { name: "toppen av stratosfæren", m: 50000 },
-  { name: "høyden der meteoritter brenner opp", m: 80000 },
-  { name: "verdensrommet (Kármán-linjen)", m: 100000 },
-  { name: "nordlyshøyde", m: 200000 },
-  { name: "den internasjonale romstasjonen (ISS)", m: 420000 },
+const ELEVATION_THINGS = [
+  { name: "Eiffeltårn", m: 330, roundOnly: [50, 100, 150, 200, 250, 500, 1000] },
+  { name: "Preikestoler", m: 604, roundOnly: [25, 50, 75, 100, 150, 200, 500] },
+  { name: "Burj Khalifa", m: 830, roundOnly: [25, 50, 75, 100, 150, 200] },
+  { name: "Galdhøpiggen", m: 2469, roundOnly: [10, 15, 20, 25, 30, 40, 50, 75, 100] },
+  { name: "Kilimanjaro", m: 5895, nice: true },
+  { name: "Mount Everest", m: 8849, nice: true },
 ] as const;
 
 function getElevationComparison(m: number): string {
-  let best: { name: string; phrase: string; score: number } | null = null;
+  let best: { text: string; score: number } | null = null;
 
-  for (const landmark of ELEVATION_LANDMARKS) {
-    const ratio = m / landmark.m;
+  for (const thing of ELEVATION_THINGS) {
+    const n = m / thing.m;
+    if (n < 2) continue;
 
-    const candidates: { phrase: string; score: number }[] = [];
+    if ("roundOnly" in thing && thing.roundOnly) {
+      for (const target of thing.roundOnly) {
+        const err = Math.abs(n - target) / target;
+        if (err <= 0.06) {
+          const impressiveness = target >= 1000 ? 5 : target >= 500 ? 4 : target >= 100 ? 3 : target >= 50 ? 2 : 1;
+          const score = err - impressiveness * 0.02;
+          if (!best || score < best.score) {
+            best = { text: `${target} × ${thing.name}`, score };
+          }
+        }
+      }
+    }
 
-    if (ratio >= 0.95 && ratio <= 1.05)
-      candidates.push({ phrase: `Like høyt som ${landmark.name}`, score: Math.abs(ratio - 1) });
-    if (ratio > 1.05 && ratio <= 1.15)
-      candidates.push({ phrase: `Litt høyere enn ${landmark.name}`, score: Math.abs(ratio - 1) });
-    if (ratio > 1.15 && ratio <= 1.4)
-      candidates.push({ phrase: `Godt over ${landmark.name}`, score: Math.abs(ratio - 1) });
-    if (ratio >= 0.85 && ratio < 0.95)
-      candidates.push({ phrase: `Nesten oppe ved ${landmark.name}`, score: Math.abs(ratio - 1) });
-    if (ratio >= 0.45 && ratio <= 0.55)
-      candidates.push({ phrase: `Halvveis til ${landmark.name}`, score: Math.abs(ratio - 0.5) });
-    if (ratio > 0.55 && ratio < 0.7)
-      candidates.push({ phrase: `Over halvveis til ${landmark.name}`, score: Math.abs(ratio - 0.6) });
-    if (ratio >= 0.7 && ratio < 0.85)
-      candidates.push({ phrase: `Nesten oppe ved ${landmark.name}`, score: Math.abs(ratio - 0.8) });
-
-    for (const c of candidates) {
-      if (!best || c.score < best.score) {
-        best = { name: landmark.name, phrase: c.phrase, score: c.score };
+    if ("nice" in thing && thing.nice) {
+      const rounded = Math.round(n * 10) / 10;
+      const err = Math.abs(n - rounded) / n;
+      const isWholeNumber = Math.abs(rounded - Math.round(rounded)) < 0.01;
+      const display = isWholeNumber ? `${Math.round(rounded)}` : rounded.toFixed(1);
+      const famousBonus = thing.m >= 8000 ? 0.03 : 0.015;
+      const score = err - famousBonus;
+      if (!best || score < best.score) {
+        best = { text: `${display} × ${thing.name}`, score };
       }
     }
   }
 
-  if (best) return best.phrase;
-  const everests = (m / 8849).toFixed(1);
-  return `${everests} × Mount Everest`;
+  return best?.text ?? `${(m / 8849).toFixed(1)} × Mount Everest`;
 }
 
 function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
