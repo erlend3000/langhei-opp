@@ -161,7 +161,7 @@ export default function Home() {
             />
             <FunFactBox
               title="Høydemeter samlet"
-              text={`${stats.funFacts.totalElevationGain.toLocaleString("nb-NO")} høydemeter til sammen. ${stats.funFacts.everestMultiple} × Mount Everest!`}
+              text={`${stats.funFacts.totalElevationGain.toLocaleString("nb-NO")} høydemeter til sammen. ${stats.funFacts.totalElevationComparison}!`}
             />
             <FunFactBox
               title="Størst forbedring"

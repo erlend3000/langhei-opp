@@ -272,7 +272,7 @@ function PosterContent({
               title="Høydemeter samlet"
               text={`${stats.funFacts.totalElevationGain.toLocaleString(
                 "nb-NO"
-              )} høydemeter til sammen. ${stats.funFacts.everestMultiple} × Mount Everest!`}
+              )} høydemeter til sammen. ${stats.funFacts.totalElevationComparison}!`}
             />
             <FunFactCard
               title="Størst forbedring"

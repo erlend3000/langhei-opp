@@ -120,6 +120,7 @@ export interface FunFacts {
   totalKmRun: number;
   totalKmComparison: string;
   totalElevationGain: number;
+  totalElevationComparison: string;
   everestMultiple: number;
   biggestFamily: { lastName: string; members: number; participations: number };
   recordSpeedKmh: number;
@@ -442,6 +443,49 @@ function getDistanceComparison(km: number): string {
   return `${km} km`;
 }
 
+const ELEVATION_LANDMARKS = [
+  { name: "toppen av stratosfæren", m: 50000 },
+  { name: "høyden der meteoritter brenner opp", m: 80000 },
+  { name: "verdensrommet (Kármán-linjen)", m: 100000 },
+  { name: "nordlyshøyde", m: 200000 },
+  { name: "den internasjonale romstasjonen (ISS)", m: 420000 },
+] as const;
+
+function getElevationComparison(m: number): string {
+  let best: { name: string; phrase: string; score: number } | null = null;
+
+  for (const landmark of ELEVATION_LANDMARKS) {
+    const ratio = m / landmark.m;
+
+    const candidates: { phrase: string; score: number }[] = [];
+
+    if (ratio >= 0.95 && ratio <= 1.05)
+      candidates.push({ phrase: `Like høyt som ${landmark.name}`, score: Math.abs(ratio - 1) });
+    if (ratio > 1.05 && ratio <= 1.15)
+      candidates.push({ phrase: `Litt høyere enn ${landmark.name}`, score: Math.abs(ratio - 1) });
+    if (ratio > 1.15 && ratio <= 1.4)
+      candidates.push({ phrase: `Godt over ${landmark.name}`, score: Math.abs(ratio - 1) });
+    if (ratio >= 0.85 && ratio < 0.95)
+      candidates.push({ phrase: `Nesten oppe ved ${landmark.name}`, score: Math.abs(ratio - 1) });
+    if (ratio >= 0.45 && ratio <= 0.55)
+      candidates.push({ phrase: `Halvveis til ${landmark.name}`, score: Math.abs(ratio - 0.5) });
+    if (ratio > 0.55 && ratio < 0.7)
+      candidates.push({ phrase: `Over halvveis til ${landmark.name}`, score: Math.abs(ratio - 0.6) });
+    if (ratio >= 0.7 && ratio < 0.85)
+      candidates.push({ phrase: `Nesten oppe ved ${landmark.name}`, score: Math.abs(ratio - 0.8) });
+
+    for (const c of candidates) {
+      if (!best || c.score < best.score) {
+        best = { name: landmark.name, phrase: c.phrase, score: c.score };
+      }
+    }
+  }
+
+  if (best) return best.phrase;
+  const everests = (m / 8849).toFixed(1);
+  return `${everests} × Mount Everest`;
+}
+
 function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
   const all = allResults || results;
   // Most participations counts ALL (including trim/barn)
@@ -508,6 +552,7 @@ function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
   const totalKmRun = Math.round((results.length * COURSE.length) / 1000);
   const totalKmComparison = getDistanceComparison(totalKmRun);
   const totalElevationGain = results.length * COURSE.grossElevationGain;
+  const totalElevationComparison = getElevationComparison(totalElevationGain);
   const everestMultiple = parseFloat((totalElevationGain / 8849).toFixed(1));
 
   // Biggest family (by last name)
@@ -614,6 +659,7 @@ function computeFunFacts(results: Result[], allResults?: Result[]): FunFacts {
     totalKmRun,
     totalKmComparison,
     totalElevationGain,
+    totalElevationComparison,
     everestMultiple,
     biggestFamily: {
       lastName: biggestFamilyEntry[0],
