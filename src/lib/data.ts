@@ -428,16 +428,16 @@ function getDistanceComparison(km: number): string {
   if (!best) return `${km} km`;
 
   const ratio = best.ratio;
-  const dest = `Gjeving–${best.city}`;
+  const dest = `Gjeving-${best.city}`;
 
-  if (ratio >= 0.95 && ratio <= 1.05) return `omtrent som ${dest}`;
-  if (ratio > 1.05 && ratio <= 1.15) return `litt mer enn ${dest}`;
-  if (ratio > 1.15 && ratio <= 1.35) return `godt over ${dest}`;
-  if (ratio > 1.35 && ratio <= 1.6) return `nesten halvannen gang ${dest}`;
-  if (ratio > 1.6 && ratio <= 2.1) return `nesten to ganger ${dest}`;
-  if (ratio > 2.1 && ratio <= 2.5) return `over dobbelt ${dest}`;
-  if (ratio >= 0.85 && ratio < 0.95) return `nesten like langt som ${dest}`;
-  if (ratio >= 0.8 && ratio < 0.85) return `ikke langt unna ${dest}`;
+  if (ratio >= 0.95 && ratio <= 1.05) return `Omtrent som ${dest}`;
+  if (ratio > 1.05 && ratio <= 1.15) return `Litt mer enn ${dest}`;
+  if (ratio > 1.15 && ratio <= 1.35) return `Godt over ${dest}`;
+  if (ratio > 1.35 && ratio <= 1.6) return `Nesten halvannen gang ${dest}`;
+  if (ratio > 1.6 && ratio <= 2.1) return `Nesten to ganger ${dest}`;
+  if (ratio > 2.1 && ratio <= 2.5) return `Over dobbelt ${dest}`;
+  if (ratio >= 0.85 && ratio < 0.95) return `Nesten like langt som ${dest}`;
+  if (ratio >= 0.8 && ratio < 0.85) return `Ikke langt unna ${dest}`;
 
   return `${km} km`;
 }

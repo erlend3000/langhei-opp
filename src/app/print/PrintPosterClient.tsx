@@ -266,7 +266,7 @@ function PosterContent({
           >
             <FunFactCard
               title="Samlet distanse"
-              text={`Alle deltakere har til sammen løpt ${stats.funFacts.totalKmRun} km — ${stats.funFacts.totalKmComparison}!`}
+              text={`Alle deltakere har til sammen løpt ${stats.funFacts.totalKmRun} km. ${stats.funFacts.totalKmComparison}!`}
             />
             <FunFactCard
               title="Høydemeter samlet"
